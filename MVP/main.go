@@ -21,4 +21,8 @@ func main() {
 	if userCommand == command.Hello {
 		fmt.Println("got got got")
 	}
+
+	if userCommand == command.Init {
+		command.InitGot()
+	}
 }

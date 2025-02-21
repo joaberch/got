@@ -4,5 +4,5 @@ type Type int
 
 const (
 	Hello Type = iota
-	Other
+	Init
 )
