@@ -2,7 +2,10 @@ package command
 
 import (
 	"errors"
+	"fmt"
 	"os"
+	"os/exec"
+	"runtime"
 )
 
 var ErrUnknownCommand = errors.New("command unknown")
@@ -24,5 +27,14 @@ func InitGot() error {
 	if err != nil {
 		return err
 	}
+
+	if runtime.GOOS == "windows" {
+		cmd := exec.Command("attrib", "+H", ".got") //Utilise attrib pour cacher le dossier
+		err := cmd.Run()
+		if err != nil {
+			return fmt.Errorf("impossible to hide the folder : %v", err)
+		}
+	}
+
 	return nil
 }
