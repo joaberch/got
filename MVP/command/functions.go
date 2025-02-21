@@ -1,12 +1,18 @@
 package command
 
-import "fmt"
+import (
+	"errors"
+)
+
+var ErrUnknownCommand = errors.New("command unknown")
+
+var CommandsMap = map[string]Type{
+	"hello": Hello,
+}
 
 func GetCommand(name string) (Type, error) {
-	switch name {
-	case "hello":
-		return Hello, nil
-	default:
-		return -1, fmt.Errorf("command unknown")
+	if cmdType, found := CommandsMap[name]; found {
+		return cmdType, nil
 	}
+	return -1, ErrUnknownCommand
 }
