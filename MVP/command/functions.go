@@ -1,17 +1,16 @@
 package command
 
 import (
-	"encoding/json"
+	"encoding/csv"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"runtime"
 )
 
 var folder = ".got"
-var stagingFile = "staging.json"
+var stagingFile = "staging.csv"
 
 var ErrUnknownCommand = errors.New("command unknown")
 
@@ -27,7 +26,7 @@ var CommandsMap = map[string]Type{
 // StagingEntry enum the json key name
 type StagingEntry struct {
 	Path string `json:"path"`
-	Type string `json:"type"`
+	Type string `json:"type"` //file or directory
 }
 
 // GetCommand retrieves the command type for a given name from CommandsMap, or returns an error if the command is unknown.
@@ -42,40 +41,38 @@ func GetCommand(name string) (Type, error) {
 // It validates the paths, determines their type (file or directory), and adds entries to the staging JSON file.
 // Returns an error if any operation, such as file reading, marshalling, or writing, fails.
 func AddEntryToStaging(paths []string) error {
-	var staging []StagingEntry //Get the enum of json key
-
-	//Try reading the file, check it exist and can be processed
-	if _, err := os.Stat(folder + "/" + stagingFile); err == nil {
-		_, err := ioutil.ReadFile(folder + "/" + stagingFile)
-		if err != nil {
-			return fmt.Errorf("impossible to read the staging file : %v", err)
-		}
+	// Open file with read/write, create it if doesn't exist
+	file, err := os.OpenFile(folder+"/"+stagingFile, os.O_RDWR|os.O_CREATE, 0644)
+	if err != nil {
+		return fmt.Errorf("impossible to open the staging file : %v", err)
 	}
+	defer file.Close() //Close the file at the end of the function
 
-	//Foreach parameter given (each one is a file or a folder)
+	writer := csv.NewWriter(file)
+	defer writer.Flush() //Close the CSV writer at the end of the function
+
+	// For each file/folder given
 	for _, path := range paths {
-		info, err := os.Stat(path) //Check the path
+		// Check the file exist
+		info, err := os.Stat(path)
 		if err != nil {
-			return fmt.Errorf("impossible to get the info of the file : %v", err)
+			return fmt.Errorf("the file or folder '%s' doesn't exist : %v", path, err)
 		}
 
-		//If is a file or a folder
+		//Check if is directory or file
 		entryType := "file"
 		if info.IsDir() {
 			entryType = "directory"
 		}
 
-		//Add the path and the type (file/folder)
-		staging = append(staging, StagingEntry{Path: path, Type: entryType})
+		// Write a line in the csv
+		err = writer.Write([]string{path, entryType})
+		if err != nil {
+			return fmt.Errorf("impossible to write in the csv file : %v", err)
+		}
 	}
-	data, err := json.MarshalIndent(staging, "", "  ") //Serialize object
-	if err != nil {
-		return fmt.Errorf("impossible to marshal the staging file : %v", err)
-	}
-	if err := ioutil.WriteFile(folder+"/"+stagingFile, data, os.ModePerm); err != nil {
-		return fmt.Errorf("impossible to write the staging file : %v", err)
-	}
-	fmt.Printf("Files added to staging")
+
+	fmt.Println("File added to staging.")
 	return nil
 }
 
