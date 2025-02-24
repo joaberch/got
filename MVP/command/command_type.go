@@ -7,5 +7,5 @@ const (
 	Init
 	Help
 	Version
-	Add
+	Stage
 )

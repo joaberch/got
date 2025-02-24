@@ -32,8 +32,8 @@ func main() {
 	case command.Version:
 		command.ShowVersion()
 		break
-	case command.Add:
-		command.HandleAddCommand(os.Args[2:]) //give everything after the second element (got add ...)
+	case command.Stage:
+		command.HandleAddCommand(os.Args[2:]) //give everything after the second element (got stage ...)
 		break
 	default:
 		command.ShowHelp()

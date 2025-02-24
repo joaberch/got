@@ -21,7 +21,7 @@ var CommandsMap = map[string]Type{
 	"init":    Init,
 	"help":    Help,
 	"version": Version,
-	"add":     Add,
+	"stage":   Stage,
 }
 
 // StagingEntry enum the json key name
