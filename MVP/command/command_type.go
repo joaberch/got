@@ -7,4 +7,5 @@ const (
 	Init
 	Help
 	Version
+	Add
 )

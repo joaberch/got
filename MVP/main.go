@@ -34,4 +34,8 @@ func main() {
 	if userCommand == command.Version {
 		command.ShowVersion()
 	}
+
+	if userCommand == command.Add {
+		command.HandleAddCommand(os.Args[2:])
+	}
 }
