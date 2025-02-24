@@ -33,7 +33,6 @@ func main() {
 		command.ShowVersion()
 		break
 	case command.Stage:
-		command.HandleAddCommand(os.Args[2:]) //give everything after the second element (got stage ...)
 		command.HandleStageCommand(os.Args[2:]) //give everything after the second element (got stage ...)
 		break
 	default:
