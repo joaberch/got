@@ -37,12 +37,58 @@ func GetCommand(name string) (Type, error) {
 	return -1, ErrUnknownCommand
 }
 
+// ReadStagingEntries reads the staging CSV file and returns a slice of StagingEntry or an empty slice if the file doesn't exist.
+// Returns an error if the file cannot be opened, read, or contains invalid entries.
+func ReadStagingEntries() ([]StagingEntry, error) {
+	// Check if the staging file exist
+	file, err := os.Open(folder + "/" + stagingFile)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return []StagingEntry{}, nil // If doesn't exist return empty list
+		}
+		return nil, fmt.Errorf("impossible d'ouvrir le fichier CSV : %v", err)
+	}
+	defer file.Close()
+
+	reader := csv.NewReader(file)
+
+	// Read every line of the csv
+	records, err := reader.ReadAll()
+	if err != nil {
+		return nil, fmt.Errorf("impossible de lire le fichier CSV : %v", err)
+	}
+
+	// COnvert every record in StagingEntry (ignore the first 2 object)
+	var entries []StagingEntry
+	for i, record := range records {
+		if len(record) < 2 {
+			return nil, fmt.Errorf("ligne %d invalide dans le fichier CSV", i+1)
+		}
+		entries = append(entries, StagingEntry{
+			Path: record[0],
+			Type: record[1],
+		})
+	}
+
+	return entries, nil
+}
+
 // AddEntryToStaging adds provided file or directory paths to the staging file, creating or updating it as needed.
 // It validates the paths, determines their type (file or directory), and adds entries to the staging JSON file.
 // Returns an error if any operation, such as file reading, marshalling, or writing, fails.
 func AddEntryToStaging(paths []string) error {
+	existingEntries, err := ReadStagingEntries()
+	if err != nil {
+		return fmt.Errorf("impossible to read the staging file : %v", err)
+	}
+
+	entryMap := make(map[string]struct{})
+	for _, entry := range existingEntries {
+		entryMap[entry.Path] = struct{}{}
+	}
+
 	// Open file with read/write, create it if doesn't exist
-	file, err := os.OpenFile(folder+"/"+stagingFile, os.O_RDWR|os.O_CREATE, 0644)
+	file, err := os.OpenFile(folder+"/"+stagingFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return fmt.Errorf("impossible to open the staging file : %v", err)
 	}
@@ -65,11 +111,18 @@ func AddEntryToStaging(paths []string) error {
 			entryType = "directory"
 		}
 
+		//Prevent duplicate
+		if _, exists := entryMap[path]; exists {
+			fmt.Printf("The file or folder '%s' is already in the staging file, ignored.\n", path)
+			continue
+		}
+
 		// Write a line in the csv
 		err = writer.Write([]string{path, entryType})
 		if err != nil {
 			return fmt.Errorf("impossible to write in the csv file : %v", err)
 		}
+		entryMap[path] = struct{}{}
 	}
 
 	fmt.Println("File added to staging.")
