@@ -30,4 +30,8 @@ func main() {
 	if userCommand == command.Help {
 		command.ShowHelp()
 	}
+
+	if userCommand == command.Version {
+		command.ShowVersion()
+	}
 }

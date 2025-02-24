@@ -11,9 +11,10 @@ import (
 var ErrUnknownCommand = errors.New("command unknown")
 
 var CommandsMap = map[string]Type{
-	"hello": Hello,
-	"init":  Init,
-	"help":  Help,
+	"hello":   Hello,
+	"init":    Init,
+	"help":    Help,
+	"version": Version,
 }
 
 func GetCommand(name string) (Type, error) {

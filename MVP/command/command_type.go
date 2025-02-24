@@ -6,4 +6,5 @@ const (
 	Hello Type = iota
 	Init
 	Help
+	Version
 )
