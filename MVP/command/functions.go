@@ -13,6 +13,7 @@ var ErrUnknownCommand = errors.New("command unknown")
 var CommandsMap = map[string]Type{
 	"hello": Hello,
 	"init":  Init,
+	"help":  Help,
 }
 
 func GetCommand(name string) (Type, error) {
@@ -22,6 +23,13 @@ func GetCommand(name string) (Type, error) {
 	return -1, ErrUnknownCommand
 }
 
+func ShowHelp() {
+	fmt.Println("Got commands:")
+	for name := range CommandsMap {
+		fmt.Println("got", name)
+	}
+}
+
 func InitGot() error {
 	err := os.Mkdir(".got", os.ModePerm)
 	if err != nil {
@@ -29,7 +37,7 @@ func InitGot() error {
 	}
 
 	if runtime.GOOS == "windows" {
-		cmd := exec.Command("attrib", "+H", ".got") //Utilise attrib pour cacher le dossier
+		cmd := exec.Command("attrib", "+H", ".got") //Use attrib to hide the folder
 		err := cmd.Run()
 		if err != nil {
 			return fmt.Errorf("impossible to hide the folder : %v", err)

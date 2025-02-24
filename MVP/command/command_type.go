@@ -5,4 +5,5 @@ type Type int
 const (
 	Hello Type = iota
 	Init
+	Help
 )
