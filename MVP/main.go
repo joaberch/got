@@ -19,23 +19,23 @@ func main() {
 		return
 	}
 
-	if userCommand == command.Hello {
+	switch userCommand {
+	case command.Hello:
 		fmt.Println("got got got")
-	}
-
-	if userCommand == command.Init {
+		break
+	case command.Init:
 		command.InitGot()
-	}
-
-	if userCommand == command.Help {
+		break
+	case command.Help:
 		command.ShowHelp()
-	}
-
-	if userCommand == command.Version {
+		break
+	case command.Version:
 		command.ShowVersion()
-	}
-
-	if userCommand == command.Add {
-		command.HandleAddCommand(os.Args[2:])
+		break
+	case command.Add:
+		command.HandleAddCommand(os.Args[2:]) //give everything after the second element (got add ...)
+		break
+	default:
+		command.ShowHelp()
 	}
 }
