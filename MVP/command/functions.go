@@ -149,8 +149,8 @@ func AddEntryToStaging(paths []string) error {
 	return nil
 }
 
-// HandleAddCommand processes the "add" command by adding specified files/directories to the staging file and validating inputs.
-func HandleAddCommand(args []string) {
+// HandleStageCommand processes the "add" command by adding specified files/directories to the staging file and validating inputs.
+func HandleStageCommand(args []string) {
 	if len(args) < 1 {
 		fmt.Println("You must specify at least one file or directory")
 		fmt.Println("Usage : got add <file1|folder1> [<file2/folder2>...]")
