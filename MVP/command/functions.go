@@ -75,7 +75,7 @@ func AddEntryToStaging(paths []string) error {
 	if err := ioutil.WriteFile(folder+"/"+stagingFile, data, os.ModePerm); err != nil {
 		return fmt.Errorf("impossible to write the staging file : %v", err)
 	}
-	fmt.Printf("%v Staging file updated")
+	fmt.Printf("Files added to staging")
 	return nil
 }
 
