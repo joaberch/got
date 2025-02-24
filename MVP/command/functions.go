@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 )
 
@@ -106,26 +107,45 @@ func AddEntryToStaging(paths []string) error {
 		}
 
 		//Check if is directory or file
-		entryType := "file"
-		if info.IsDir() {
-			entryType = "directory"
-		}
+		if info.IsDir() { //Recursive
+			//Get children
+			entries, err := os.ReadDir(path)
+			if err != nil {
+				return fmt.Errorf("impossible to read the directory '%s' : %v", path, err)
+			}
 
-		//Prevent duplicate
-		if _, exists := entryMap[path]; exists {
-			fmt.Printf("The file or folder '%s' is already in the staging file, ignored.\n", path)
-			continue
-		}
+			//Recursive call
+			for _, entry := range entries {
+				childPath := filepath.Join(path, entry.Name())
+				err := AddEntryToStaging([]string{childPath})
+				if err != nil {
+					return err //If there's one error it's everywhere
+				}
+			}
 
-		// Write a line in the csv
-		err = writer.Write([]string{path, entryType})
-		if err != nil {
-			return fmt.Errorf("impossible to write in the csv file : %v", err)
+			if _, exists := entryMap[path]; !exists {
+				err := writer.Write([]string{path, "directory"})
+				if err != nil {
+					return fmt.Errorf("impossible to write in the csv file : %v", err)
+				}
+				entryMap[path] = struct{}{}
+			}
+		} else {
+
+			//Prevent duplicate
+			if _, exists := entryMap[path]; exists {
+				return fmt.Errorf("the file or folder '%s' is already in the staging file, ignored", path)
+			}
+
+			// Write a line in the csv
+			err = writer.Write([]string{path, "root"})
+			if err != nil {
+				return fmt.Errorf("impossible to write in the csv file : %v", err)
+			}
+			entryMap[path] = struct{}{}
 		}
-		entryMap[path] = struct{}{}
 	}
 
-	fmt.Println("File added to staging.")
 	return nil
 }
 
@@ -141,6 +161,7 @@ func HandleAddCommand(args []string) {
 	if err != nil {
 		fmt.Println("Error :", err)
 	}
+	fmt.Println("File(s) added to staging area.")
 }
 
 // ShowVersion prints the current version of the application to the standard output.
