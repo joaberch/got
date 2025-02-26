@@ -29,23 +29,23 @@ func GenerateCommitID(data string, message string, files []CommitFile) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
-func CommitChange(message string) error {
+func CommitChange(message string) {
 	//Check message
 	if message == "" {
-		return fmt.Errorf("commit message cannot be empty")
+		fmt.Errorf("commit message cannot be empty")
 	}
 
 	//Open the staging file
 	file, err := os.Open(stagingPath)
 	if err != nil {
-		return fmt.Errorf("error while opening %v : %v", stagingPath, err)
+		fmt.Errorf("error while opening %v : %v", stagingPath, err)
 	}
 	defer file.Close()
 
 	reader := csv.NewReader(file)
 	records, err := reader.ReadAll()
 	if err != nil {
-		return fmt.Errorf("error while reading %v : %v", stagingPath, err)
+		fmt.Errorf("error while reading %v : %v", stagingPath, err)
 	}
 
 	//Generate commit object
@@ -69,19 +69,18 @@ func CommitChange(message string) error {
 	commitFilePath := fmt.Sprintf(".got/objects/%s.json", commit.CommitId)
 	commitFile, err := os.Create(commitFilePath)
 	if err != nil {
-		return fmt.Errorf("error while creating commit file : %v", err)
+		fmt.Errorf("error while creating commit file : %v", err)
 	}
 	defer commitFile.Close()
 
 	if err = json.NewEncoder(commitFile).Encode(commit); err != nil {
-		return fmt.Errorf("error while encoding commit : %v", err)
+		fmt.Errorf("error while encoding commit : %v", err)
 	}
 
 	//Clean staging area
 	if err = os.Truncate(stagingPath, 0); err != nil {
-		return fmt.Errorf("error while clearing %v : %v", stagingPath, err)
+		fmt.Errorf("error while clearing %v : %v", stagingPath, err)
 	}
 
 	fmt.Printf("Commit %s created successfully !", commit.CommitId)
-	return nil
 }
