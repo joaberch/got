@@ -16,6 +16,7 @@ func TestGetCommand(t *testing.T) {
 		{"help", Help, nil},
 		{"version", Version, nil},
 		{"stage", Stage, nil},
+		{"unstage", Unstage, nil},
 		{"doesntExist", -1, ErrUnknownCommand},
 		{"", -1, ErrUnknownCommand},
 	}

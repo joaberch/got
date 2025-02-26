@@ -1,6 +1,7 @@
 package command
 
 import (
+	"bufio"
 	"encoding/csv"
 	"errors"
 	"fmt"
@@ -8,6 +9,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
 )
 
 var folder = ".got"
@@ -22,6 +24,7 @@ var CommandsMap = map[string]Type{
 	"help":    Help,
 	"version": Version,
 	"stage":   Stage,
+	"unstage": Unstage,
 }
 
 // StagingEntry enum the json key name
@@ -45,7 +48,7 @@ func ReadStagingEntries() ([]StagingEntry, error) {
 	file, err := os.Open(folder + "/" + stagingFile)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return []StagingEntry{}, nil // If doesn't exist return empty list
+			return []StagingEntry{}, nil // If it doesn't exist return empty list
 		}
 		return nil, fmt.Errorf("impossible d'ouvrir le fichier CSV : %v", err)
 	}
@@ -59,7 +62,7 @@ func ReadStagingEntries() ([]StagingEntry, error) {
 		return nil, fmt.Errorf("impossible de lire le fichier CSV : %v", err)
 	}
 
-	// COnvert every record in StagingEntry (ignore the first 2 object)
+	// Convert every record in StagingEntry (ignore the first 2 object)
 	var entries []StagingEntry
 	for i, record := range records {
 		if len(record) < 2 {
@@ -74,9 +77,75 @@ func ReadStagingEntries() ([]StagingEntry, error) {
 	return entries, nil
 }
 
-// AddEntryToStaging adds provided file or directory paths to the staging file, creating or updating it as needed.
-// It validates the paths, determines their type (file or directory), and adds entries to the staging JSON file.
-// Returns an error if any operation, such as file reading, marshalling, or writing, fails.
+func RemoveEntryToStaging(paths []string) error {
+	stagingPath := folder + "/" + stagingFile
+	file, err := os.OpenFile(stagingPath, os.O_RDONLY, 0644) // Open the file in reading
+	if err != nil {
+		if os.IsNotExist(err) {
+			return fmt.Errorf("the staging file doesn't exist : %v", err)
+		}
+		return fmt.Errorf("impossible to open the staging file : %v", err)
+	}
+	defer file.Close()
+
+	//Bufio to read line by line
+	scanner := bufio.NewScanner(file)
+	var filteredLine []string
+
+	//Foreach line
+	for scanner.Scan() {
+		line := scanner.Text()
+		//Get the name of the file read
+		text := strings.Split(line, ",")[0]
+		//If we should delete that line
+		shouldRemove := false
+
+		//Check if arg match line
+		for _, path := range paths {
+			if text == path {
+				shouldRemove = true
+				break
+			}
+		}
+
+		//If we keep the line
+		if !shouldRemove {
+			filteredLine = append(filteredLine, line)
+		}
+	}
+	if len(filteredLine) == 0 {
+		return fmt.Errorf("no entry found in the staging file, entry : %v", paths)
+	}
+	if err := scanner.Err(); err != nil {
+		return fmt.Errorf("error while reading the staging file : %v", err)
+	}
+
+	//Open file in writing with trunc to overwrite it
+	file, err = os.OpenFile(stagingPath, os.O_WRONLY|os.O_TRUNC, 0644)
+	if err != nil {
+		return fmt.Errorf("impossible to open the staging file : %v", err)
+	}
+	defer file.Close()
+
+	writer := bufio.NewWriter(file)
+	for _, entry := range filteredLine {
+		_, err := writer.WriteString(entry + "\n")
+		if err != nil {
+			return fmt.Errorf("impossible to write in the csv file : %v", err)
+		}
+	}
+
+	//Check everything has been written
+	err = writer.Flush()
+	if err != nil {
+		return fmt.Errorf("error while flushing data in the staging file : %v", err)
+	}
+
+	return nil
+}
+
+// AddEntryToStaging adds specified files or directories to the staging area, ensuring no duplicates and validating their existence.
+// Returns an error if any file or directory does not exist or cannot be processed.
 func AddEntryToStaging(paths []string) error {
 	existingEntries, err := ReadStagingEntries()
 	if err != nil {
@@ -88,7 +157,7 @@ func AddEntryToStaging(paths []string) error {
 		entryMap[entry.Path] = struct{}{}
 	}
 
-	// Open file with read/write, create it if doesn't exist
+	// Open file with read/write, create it if it doesn't exist
 	file, err := os.OpenFile(folder+"/"+stagingFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return fmt.Errorf("impossible to open the staging file : %v", err)
@@ -162,6 +231,22 @@ func HandleStageCommand(args []string) {
 		fmt.Println("Error :", err)
 	}
 	fmt.Println("File(s) added to staging area.")
+}
+
+// HandleUnStageCommand removes specified files or directories from the staging area and displays a confirmation message or error.
+func HandleUnStageCommand(args []string) {
+	if len(args) < 1 {
+		fmt.Println("You must specify at least one file or directory")
+		fmt.Println("Usage : got unstage <file1|folder1> [<file2/folder2>...]")
+		return
+	}
+
+	err := RemoveEntryToStaging(args)
+	if err != nil {
+		fmt.Println("Error :", err)
+	} else {
+		fmt.Println("File(s) removed from staging area : ", args)
+	}
 }
 
 // ShowVersion prints the current version of the application to the standard output.

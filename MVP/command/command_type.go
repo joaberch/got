@@ -8,4 +8,5 @@ const (
 	Help
 	Version
 	Stage
+	Unstage
 )
