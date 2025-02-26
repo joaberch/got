@@ -14,6 +14,7 @@ var CommandsMap = map[string]Type{
 	"version": Version,
 	"stage":   Stage,
 	"unstage": Unstage,
+	"commit":  Commit,
 }
 
 // GetCommand retrieves the command type for a given name from CommandsMap, or returns an error if the command is unknown.

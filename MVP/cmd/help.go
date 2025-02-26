@@ -8,6 +8,7 @@ func ShowHelp() {
 	fmt.Println("Commands:")
 	fmt.Println("    init     Initialize a new project .got")
 	fmt.Println("    stage    Add file or folder into the staging area")
+	fmt.Println("    commit   Commit the changes in the staging area")
 	fmt.Println("    unstage  Remove file or folder from the staging area")
 	fmt.Println("    help     Display that help message")
 	fmt.Println("    version  Display the current version of Got")

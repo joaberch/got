@@ -39,6 +39,9 @@ func main() {
 	case command.Unstage:
 		cmd.HandleUnStageCommand(os.Args[2:]) //give every argument except the first two (got unstage ...)
 		break
+	case command.Commit:
+		cmd.CommitChange(os.Args[2])
+		break
 	default:
 		cmd.ShowHelp()
 	}

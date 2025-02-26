@@ -9,4 +9,5 @@ const (
 	Version
 	Stage
 	Unstage
+	Commit
 )

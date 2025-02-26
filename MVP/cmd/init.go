@@ -33,5 +33,12 @@ func InitProject() {
 			fmt.Printf("impossible to create the staging file : %v", err)
 		}
 	}
+
+	//Create the objects folder
+	err = os.Mkdir(folder+"/objects", os.ModePerm)
+	if err != nil {
+		fmt.Errorf("impossible to create the objects folder : %v", err)
+	}
+
 	fmt.Println("Got project initialized successfully !")
 }
