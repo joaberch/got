@@ -188,7 +188,7 @@ func AddEntryToStaging(paths []string) error {
 
 			// Write a line in the csv
 			checksum := GetChecksum(path) //Get SHA-1 hash
-			err = writer.Write([]string{path, checksum, "added/removed"})
+			err = writer.Write([]string{path, checksum, "added"})
 			if err != nil {
 				return fmt.Errorf("impossible to write in the csv file : %v", err)
 			}
