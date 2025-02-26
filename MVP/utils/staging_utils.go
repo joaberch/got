@@ -15,8 +15,9 @@ var stagingPath = folder + "/" + stagingFile
 
 // StagingEntry enum the json key name
 type StagingEntry struct {
-	Path string `json:"path"`
-	Type string `json:"type"` //file or directory
+	Path  string `json:"path"`
+	Hash  string `json:"hash"`  //SHA-1 hash of the file
+	State string `json:"state"` //added or modified or removed
 }
 
 // ReadStagingEntries reads the staging CSV file and returns a slice of StagingEntry or an empty slice if the file doesn't exist.
@@ -43,12 +44,13 @@ func ReadStagingEntries() ([]StagingEntry, error) {
 	// Convert every record in StagingEntry (ignore the first 2 object)
 	var entries []StagingEntry
 	for i, record := range records {
-		if len(record) < 2 {
+		if len(record) < 3 {
 			return nil, fmt.Errorf("ligne %d invalide dans le fichier CSV", i+1)
 		}
 		entries = append(entries, StagingEntry{
-			Path: record[0],
-			Type: record[1],
+			Path:  record[0],
+			Hash:  record[1],
+			State: record[2],
 		})
 	}
 
@@ -173,7 +175,7 @@ func AddEntryToStaging(paths []string) error {
 
 			if _, exists := entryMap[path]; !exists {
 				checksum := GetChecksum(path) //Get SHA-1 hash
-				err := writer.Write([]string{path, checksum, "added/removed"})
+				err := writer.Write([]string{path, checksum, "added"})
 				if err != nil {
 					return fmt.Errorf("impossible to write in the csv file : %v", err)
 				}
