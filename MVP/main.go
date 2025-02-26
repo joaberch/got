@@ -24,7 +24,7 @@ func main() {
 		fmt.Println("got got got")
 		break
 	case command.Init:
-		command.InitGot()
+		command.InitProject()
 		break
 	case command.Help:
 		command.ShowHelp()
