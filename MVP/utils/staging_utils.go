@@ -29,7 +29,7 @@ func ReadStagingEntries() ([]StagingEntry, error) {
 		if os.IsNotExist(err) {
 			return []StagingEntry{}, nil // If it doesn't exist return empty list
 		}
-		return nil, fmt.Errorf("impossible d'ouvrir le fichier CSV : %v", err)
+		return nil, fmt.Errorf("impossible d'ouvrir le fichier '%v' : %v", stagingPath, err)
 	}
 	defer file.Close()
 
@@ -66,6 +66,13 @@ func RemoveEntryToStaging(paths []string) error {
 		return fmt.Errorf("impossible to open the staging file : %v", err)
 	}
 	defer file.Close()
+
+	//Check if the path exist
+	for _, path := range paths {
+		if _, err := os.Stat(path); os.IsNotExist(err) {
+			return fmt.Errorf("the file or folder '%s' doesn't exist", path)
+		}
+	}
 
 	//Bufio to read line by line
 	scanner := bufio.NewScanner(file)
