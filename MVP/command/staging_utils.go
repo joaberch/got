@@ -137,7 +137,7 @@ func AddEntryToStaging(paths []string) error {
 	}
 
 	// Open file with read/write, create it if it doesn't exist
-	file, err := os.OpenFile(folder+"/"+stagingFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(stagingPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return fmt.Errorf("impossible to open the staging file : %v", err)
 	}
@@ -172,7 +172,8 @@ func AddEntryToStaging(paths []string) error {
 			}
 
 			if _, exists := entryMap[path]; !exists {
-				err := writer.Write([]string{path, "directory"})
+				checksum := GetChecksum(path) //Get SHA-1 hash
+				err := writer.Write([]string{path, checksum, "added/removed"})
 				if err != nil {
 					return fmt.Errorf("impossible to write in the csv file : %v", err)
 				}
@@ -186,7 +187,8 @@ func AddEntryToStaging(paths []string) error {
 			}
 
 			// Write a line in the csv
-			err = writer.Write([]string{path, "root"})
+			checksum := GetChecksum(path) //Get SHA-1 hash
+			err = writer.Write([]string{path, checksum, "added/removed"})
 			if err != nil {
 				return fmt.Errorf("impossible to write in the csv file : %v", err)
 			}
