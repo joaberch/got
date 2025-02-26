@@ -79,13 +79,18 @@ func RemoveEntryToStaging(paths []string) error {
 
 		//Check if arg match line
 		for _, path := range paths {
-			if text == path {
+			absPath, _ := filepath.Abs(path) //get absolute path
+			absText, _ := filepath.Abs(text) //get absolute path
+
+			//if absPath == absText they are the same file
+			//if it has the prefix we remove the whole folder
+			if absPath == absText || strings.HasPrefix(absText, absPath+"\\") {
 				shouldRemove = true
 				break
 			}
 		}
 
-		//If we keep the line
+		//Keep the line
 		if !shouldRemove {
 			filteredLine = append(filteredLine, line)
 		}
