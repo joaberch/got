@@ -8,7 +8,7 @@ import (
 )
 
 var folder = ".got"
-var stagingPath = ".got/staging"
+var stagingPath = ".got/staging.csv"
 
 // InitProject initializes a .got repository by creating the respective directory with necessary permissions.
 func InitProject() {
