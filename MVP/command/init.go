@@ -30,5 +30,5 @@ func InitProject() {
 			fmt.Printf("impossible to create the staging file : %v", err)
 		}
 	}
-	fmt.Println("Got init successfully !")
+	fmt.Println("Got project initialized successfully !")
 }
