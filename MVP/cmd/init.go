@@ -1,16 +1,18 @@
 package cmd
 
 import (
-	"MVP/utils"
 	"fmt"
 	"os"
 	"os/exec"
 	"runtime"
 )
 
+var folder = ".got"
+var stagingPath = ".got/staging"
+
 // InitProject initializes a .got repository by creating the respective directory with necessary permissions.
 func InitProject() {
-	err := os.MkdirAll(utils.folder, os.ModePerm)
+	err := os.MkdirAll(folder, os.ModePerm)
 	if err != nil {
 		fmt.Printf("Error while initialization : %v\n", err)
 		return
@@ -18,7 +20,7 @@ func InitProject() {
 
 	//Create .got folder
 	if runtime.GOOS == "windows" {
-		cmd := exec.Command("attrib", "+H", utils.folder) //Use attrib to hide the folder
+		cmd := exec.Command("attrib", "+H", folder) //Use attrib to hide the folder
 		err := cmd.Run()
 		if err != nil {
 			fmt.Printf("impossible to hide the folder : %v", err)
@@ -26,8 +28,8 @@ func InitProject() {
 	}
 
 	//Create the staging file
-	if _, err := os.Stat(utils.stagingPath); err != nil {
-		if _, err := os.Create(utils.stagingPath); err != nil {
+	if _, err := os.Stat(stagingPath); err != nil {
+		if _, err := os.Create(stagingPath); err != nil {
 			fmt.Printf("impossible to create the staging file : %v", err)
 		}
 	}
