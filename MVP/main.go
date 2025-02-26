@@ -1,6 +1,7 @@
 package main
 
 import (
+	"MVP/cmd"
 	"MVP/command"
 	"fmt"
 	"os"
@@ -8,14 +9,14 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		command.ShowHelp()
+		cmd.ShowHelp()
 		return
 	}
 
 	userCommand, err := command.GetCommand(os.Args[1])
 	if err != nil {
 		fmt.Println(err)
-		command.ShowHelp()
+		cmd.ShowHelp()
 		return
 	}
 
@@ -24,21 +25,21 @@ func main() {
 		fmt.Println("got got got")
 		break
 	case command.Init:
-		command.InitProject()
+		cmd.InitProject()
 		break
 	case command.Help:
-		command.ShowHelp()
+		cmd.ShowHelp()
 		break
 	case command.Version:
-		command.ShowVersion()
+		cmd.ShowVersion()
 		break
 	case command.Stage:
-		command.HandleStageCommand(os.Args[2:]) //give everything after the second element (got stage ...)
+		cmd.HandleStageCommand(os.Args[2:]) //give everything after the second element (got stage ...)
 		break
 	case command.Unstage:
-		command.HandleUnStageCommand(os.Args[2:]) //give every argument except the first two (got unstage ...)
+		cmd.HandleUnStageCommand(os.Args[2:]) //give every argument except the first two (got unstage ...)
 		break
 	default:
-		command.ShowHelp()
+		cmd.ShowHelp()
 	}
 }
