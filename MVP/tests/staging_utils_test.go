@@ -110,8 +110,12 @@ func TestAddEntryToStaging_SuccessFile(t *testing.T) {
 	if entries[0].Path != "test.txt" {
 		t.Errorf("Expected path 'test.txt', got '%s'", entries[0].Path)
 	}
-	if entries[0].Hash != utils.GetChecksum(entries[0].Path) {
-		t.Errorf("Expected hash '%s', got '%s'", utils.GetChecksum(entries[0].Path), entries[0].Hash)
+	expectedHash, err := utils.GetChecksum(entries[0].Path)
+	if err != nil {
+		t.Errorf("Failed to compute checksum for path '%s': %v", entries[0].Path, err)
+	}
+	if entries[0].Hash != expectedHash {
+		t.Errorf("Expected hash '%s', got '%s'", expectedHash, entries[0].Hash)
 	}
 	if entries[0].State != "added" {
 		t.Errorf("Expected state 'added', got '%s'", entries[0].State)

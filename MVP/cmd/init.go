@@ -9,6 +9,7 @@ import (
 
 var folder = ".got"
 var stagingPath = ".got/staging.csv"
+var trackingFilePath = ".got/tracking.csv"
 
 // InitProject initializes a .got repository by creating the respective directory with necessary permissions.
 func InitProject() {
@@ -38,6 +39,13 @@ func InitProject() {
 	err = os.Mkdir(folder+"/objects", os.ModePerm)
 	if err != nil {
 		fmt.Errorf("impossible to create the objects folder : %v", err)
+	}
+
+	//create the tracking file
+	if _, err := os.Stat(trackingFilePath); err != nil {
+		if _, err := os.Create(trackingFilePath); err != nil {
+			fmt.Printf("impossible to create the tracking file : %v", err)
+		}
 	}
 
 	fmt.Println("Got project initialized successfully !")

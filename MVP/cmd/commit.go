@@ -56,6 +56,7 @@ func CommitChange(message string) {
 			Checksum: record[1],
 			Status:   record[2],
 		})
+		TrackFile(record[0]) //add the new file to the tracking
 	}
 
 	commit := Commit{
@@ -83,4 +84,51 @@ func CommitChange(message string) {
 	}
 
 	fmt.Printf("Commit %s created successfully !", commit.CommitId)
+}
+
+func TrackFile(path string) {
+	//Check tracking file exist
+	if _, err := os.Stat(trackingFilePath); os.IsNotExist(err) {
+		fmt.Errorf("tracking file does not exist, initialize got first")
+	}
+
+	//Open file in append mode
+	file, err := os.OpenFile(trackingFilePath, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	if err != nil {
+		fmt.Errorf("error opening %v: %v", trackingFilePath, err)
+	}
+	defer file.Close()
+
+	//Load what's already tracked to prevent duplicate
+	existingFiles := make(map[string]bool)
+
+	trackReader, err := os.Open(trackingFilePath)
+	if err != nil {
+		fmt.Errorf("error opening %v: %v", trackingFilePath, err)
+	}
+	defer trackReader.Close()
+
+	csvReader := csv.NewReader(trackReader)
+	existingRecords, err := csvReader.ReadAll()
+	if err == nil {
+		for _, record := range existingRecords {
+			if len(record) > 0 {
+				existingFiles[record[0]] = true
+			}
+		}
+	}
+
+	//Check duplicate
+	if _, exists := existingFiles[path]; exists {
+		//Already tracked
+		return
+	}
+
+	//Add the new path in the tracking file
+	csvWriter := csv.NewWriter(file)
+	defer csvWriter.Flush()
+
+	if err := csvWriter.Write([]string{path}); err != nil {
+		fmt.Errorf("error writing to %v: %v", trackingFilePath, err)
+	}
 }
