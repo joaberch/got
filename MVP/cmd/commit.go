@@ -23,7 +23,7 @@ type Commit struct {
 	Files    []CommitFile `json:"files"`
 }
 
-func GenerateCommitID(data string, message string, files []CommitFile) string {
+func GenerateCommitID(data string) string {
 	h := sha1.New()
 	h.Write([]byte(data))
 	return hex.EncodeToString(h.Sum(nil))
@@ -40,7 +40,12 @@ func CommitChange(message string) {
 	if err != nil {
 		fmt.Errorf("error while opening %v : %v", stagingPath, err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
 
 	reader := csv.NewReader(file)
 	records, err := reader.ReadAll()
@@ -59,8 +64,9 @@ func CommitChange(message string) {
 		TrackFile(record[0]) //add the new file to the tracking
 	}
 
+	// create the commit object
 	commit := Commit{
-		CommitId: GenerateCommitID(time.Now().Format(time.RFC3339), message, files),
+		CommitId: GenerateCommitID(time.Now().Format(time.RFC3339)),
 		Date:     time.Now().Format(time.RFC3339),
 		Message:  message,
 		Files:    files,
@@ -72,7 +78,12 @@ func CommitChange(message string) {
 	if err != nil {
 		fmt.Errorf("error while creating commit file : %v", err)
 	}
-	defer commitFile.Close()
+	defer func(commitFile *os.File) {
+		err := commitFile.Close()
+		if err != nil {
+
+		}
+	}(commitFile)
 
 	if err = json.NewEncoder(commitFile).Encode(commit); err != nil {
 		fmt.Errorf("error while encoding commit : %v", err)
@@ -97,7 +108,12 @@ func TrackFile(path string) {
 	if err != nil {
 		fmt.Errorf("error opening %v: %v", trackingFilePath, err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
 
 	//Load what's already tracked to prevent duplicate
 	existingFiles := make(map[string]bool)
@@ -106,7 +122,12 @@ func TrackFile(path string) {
 	if err != nil {
 		fmt.Errorf("error opening %v: %v", trackingFilePath, err)
 	}
-	defer trackReader.Close()
+	defer func(trackReader *os.File) {
+		err := trackReader.Close()
+		if err != nil {
+
+		}
+	}(trackReader)
 
 	csvReader := csv.NewReader(trackReader)
 	existingRecords, err := csvReader.ReadAll()
