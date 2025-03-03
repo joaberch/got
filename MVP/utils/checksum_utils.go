@@ -13,7 +13,12 @@ func GetChecksum(path string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
 
 	//SHA1 object
 	h := sha1.New()

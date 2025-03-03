@@ -22,7 +22,7 @@ func main() {
 
 	switch userCommand {
 	case command.Hello:
-		fmt.Println("got got got")
+		cmd.SayHello()
 		break
 	case command.Init:
 		cmd.InitProject()

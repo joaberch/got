@@ -2,6 +2,7 @@ package tests
 
 import (
 	"MVP/command"
+	"errors"
 	"testing"
 )
 
@@ -23,7 +24,7 @@ func TestGetCommand(t *testing.T) {
 
 	for _, test := range tests {
 		result, err := command.GetCommand(test.input)
-		if result != test.expected || err != test.err {
+		if result != test.expected || !errors.Is(err, test.err) {
 			t.Errorf("For input '%s', expected (%v, %v) but got (%v, %v)", test.input, test.expected, test.err, result, err)
 		}
 	}

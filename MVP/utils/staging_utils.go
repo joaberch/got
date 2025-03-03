@@ -31,7 +31,12 @@ func ReadStagingEntries() ([]StagingEntry, error) {
 		}
 		return nil, fmt.Errorf("impossible d'ouvrir le fichier '%v' : %v", stagingPath, err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
 
 	reader := csv.NewReader(file)
 
@@ -65,7 +70,12 @@ func RemoveEntryToStaging(paths []string) error {
 		}
 		return fmt.Errorf("impossible to open the staging file : %v", err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
 
 	//Check if the path exist
 	for _, path := range paths {
@@ -74,7 +84,7 @@ func RemoveEntryToStaging(paths []string) error {
 		}
 	}
 
-	//Bufio to read line by line
+	//read line by line
 	scanner := bufio.NewScanner(file)
 	var filteredLine []string
 
@@ -113,7 +123,12 @@ func RemoveEntryToStaging(paths []string) error {
 	if err != nil {
 		return fmt.Errorf("impossible to open the staging file : %v", err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file)
 
 	writer := bufio.NewWriter(file)
 	for _, entry := range filteredLine {
@@ -150,7 +165,12 @@ func AddEntryToStaging(paths []string) error {
 	if err != nil {
 		return fmt.Errorf("impossible to open the staging file : %v", err)
 	}
-	defer file.Close() //Close the file at the end of the function
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+
+		}
+	}(file) //Close the file at the end of the function
 
 	writer := csv.NewWriter(file)
 	defer writer.Flush() //Close the CSV writer at the end of the function
