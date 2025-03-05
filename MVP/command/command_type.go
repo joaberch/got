@@ -10,4 +10,5 @@ const (
 	Stage
 	Unstage
 	Commit
+	DiffStage
 )

@@ -36,6 +36,9 @@ func main() {
 	case command.Stage:
 		cmd.HandleStageCommand(os.Args[2:]) //give everything after the second element (got stage ...)
 		break
+	case command.DiffStage:
+		cmd.ShowDiffStage()
+		break
 	case command.Unstage:
 		cmd.HandleUnStageCommand(os.Args[2:]) //give every argument except the first two (got unstage ...)
 		break
