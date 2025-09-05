@@ -1,5 +1,7 @@
 package cmd
 
-func ShowHelp() {
+import "fmt"
 
+func ShowHelp() {
+	fmt.Println("WIP")
 }
