@@ -7,4 +7,5 @@ const (
 	CmdHelp
 	CmdVersion
 	CmdInit
+	CmdAdd
 )

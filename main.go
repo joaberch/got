@@ -24,5 +24,9 @@ func main() {
 		cmd.ShowVersion()
 	case model.CmdInit:
 		cmd.Init()
+	case model.CmdAdd:
+		if len(args) > 1 {
+			cmd.Add(args[1])
+		}
 	}
 }

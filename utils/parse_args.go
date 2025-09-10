@@ -16,6 +16,8 @@ func ParseArgs(args []string) model.ParsedArgs {
 			parsed.Command = model.CmdVersion
 		case "init", "i":
 			parsed.Command = model.CmdInit
+		case "add", "a":
+			parsed.Command = model.CmdAdd
 		}
 	}
 
