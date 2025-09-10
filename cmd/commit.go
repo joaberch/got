@@ -3,9 +3,7 @@ package cmd
 import (
 	"Got/internal/model"
 	"Got/utils"
-	"fmt"
 	"log"
-	"os"
 	"path/filepath"
 	"time"
 )
@@ -17,6 +15,8 @@ func Commit(message string) {
 	tree := utils.ReadStagingFile(stagingPath)
 	treeHash := tree.GenerateHash()
 
+	utils.CreateBlobs(tree) //.got/objects/blobs
+
 	commit := model.Commit{
 		TreeHash:   treeHash,
 		ParentHash: "TODO",
@@ -26,8 +26,7 @@ func Commit(message string) {
 	}
 
 	treeSerialized := tree.Serialize()
-	fmt.Print("test", treeHash)
-	err := os.WriteFile(".got/objects/"+treeHash, treeSerialized, 0644)
+	err := utils.WriteObject("trees", treeHash, treeSerialized) //TODO - if same hash exist, the metadata changes
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,7 +37,7 @@ func Commit(message string) {
 	}
 	commitHash := commit.Hash() //TODO - redundant in serialization
 
-	err = utils.WriteObject(commitHash, commitSerialized)
+	err = utils.WriteObject("commits", commitHash, commitSerialized)
 	if err != nil {
 		log.Fatal(err)
 	}
