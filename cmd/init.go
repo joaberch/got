@@ -18,16 +18,11 @@ func Init() {
 		return
 	}
 
-	err = os.Mkdir(pwd+"/.got", 0755) //Create folder
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	for name, fileType := range model.FilesList { //Create mandatory files/folder
 		fullpath := filepath.Join(pwd + "/.got/" + name)
 
 		if fileType == "Folder" {
-			err = os.Mkdir(fullpath, 0755)
+			err = os.MkdirAll(fullpath, 0755)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -38,5 +33,4 @@ func Init() {
 			}
 		}
 	}
-
 }
