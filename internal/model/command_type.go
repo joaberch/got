@@ -9,4 +9,5 @@ const (
 	CmdInit
 	CmdAdd
 	CmdStatus
+	CmdCommit
 )

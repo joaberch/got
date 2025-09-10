@@ -30,5 +30,7 @@ func main() {
 		}
 	case model.CmdStatus:
 		cmd.Status()
+	case model.CmdCommit:
+		cmd.Commit()
 	}
 }
