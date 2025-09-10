@@ -4,6 +4,7 @@ import (
 	"Got/cmd"
 	"Got/internal/model"
 	"Got/utils"
+	"log"
 	"os"
 )
 
@@ -37,5 +38,10 @@ func main() {
 			log.Fatal("No commit message specified")
 		}
 	case model.CmdRestore:
+		if len(args) > 1 {
+			cmd.Restore(args[1])
+		} else {
+			log.Fatal("You need to specify the hash of the file you want to restore")
+		}
 	}
 }

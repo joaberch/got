@@ -10,4 +10,5 @@ const (
 	CmdAdd
 	CmdStatus
 	CmdCommit
+	CmdRestore
 )
