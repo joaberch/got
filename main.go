@@ -31,6 +31,11 @@ func main() {
 	case model.CmdStatus:
 		cmd.Status()
 	case model.CmdCommit:
-		cmd.Commit()
+		if len(args) > 1 {
+			cmd.Commit(args[1])
+		} else {
+			log.Fatal("No commit message specified")
+		}
+	case model.CmdRestore:
 	}
 }
