@@ -20,13 +20,6 @@ func (commit *Commit) Serialize() ([]byte, error) {
 	return json.Marshal(commit)
 }
 
-// DeserializeCommit has been completely written by goland IDE, thx
-func DeserializeCommit(data []byte) (*Commit, error) {
-	var commit Commit
-	err := json.Unmarshal(data, &commit)
-	return &commit, err
-}
-
 func (commit *Commit) Hash() string {
 	data, err := commit.Serialize()
 	if err != nil {

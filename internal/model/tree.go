@@ -22,3 +22,11 @@ func (tree Tree) GenerateHash() string {
 	tree.Hash = fmt.Sprintf("%x", sum)
 	return tree.Hash
 }
+
+func (tree Tree) Serialize() []byte {
+	data, err := json.Marshal(tree)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return data
+}
