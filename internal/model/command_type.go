@@ -6,4 +6,5 @@ const (
 	CmdNone CommandType = iota
 	CmdHelp
 	CmdVersion
+	CmdInit
 )

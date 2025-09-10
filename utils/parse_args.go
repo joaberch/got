@@ -10,10 +10,12 @@ func ParseArgs(args []string) model.ParsedArgs {
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
 		switch arg {
-		case "--help", "-h":
+		case "help", "h":
 			parsed.Command = model.CmdHelp
-		case "--version", "-v":
+		case "version", "v":
 			parsed.Command = model.CmdVersion
+		case "init", "i":
+			parsed.Command = model.CmdInit
 		}
 	}
 

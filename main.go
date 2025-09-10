@@ -22,5 +22,7 @@ func main() {
 		cmd.ShowHelp()
 	case model.CmdVersion:
 		cmd.ShowVersion()
+	case model.CmdInit:
+		cmd.Init()
 	}
 }

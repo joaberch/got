@@ -1,7 +1,7 @@
 package model
 
-var FilesList = []string{
-	".got/staging.csv", //File added
-	".got/commits.csv", //Historic
-	".got/HEAD",        //Last commit
+var FilesList = map[string]string{
+	"staging.csv": "File",   //Staging area
+	"commits.csv": "File",   //Tracking file state
+	"objects":     "Folder", //Contain objects
 }
