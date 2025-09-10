@@ -28,5 +28,7 @@ func main() {
 		if len(args) > 1 {
 			cmd.Add(args[1])
 		}
+	case model.CmdStatus:
+		cmd.Status()
 	}
 }

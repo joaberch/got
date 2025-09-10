@@ -18,6 +18,8 @@ func ParseArgs(args []string) model.ParsedArgs {
 			parsed.Command = model.CmdInit
 		case "add", "a":
 			parsed.Command = model.CmdAdd
+		case "status", "s":
+			parsed.Command = model.CmdStatus
 		}
 	}
 

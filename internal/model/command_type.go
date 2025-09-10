@@ -8,4 +8,5 @@ const (
 	CmdVersion
 	CmdInit
 	CmdAdd
+	CmdStatus
 )
