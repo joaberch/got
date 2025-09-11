@@ -19,14 +19,14 @@ func Commit(message string) {
 
 	commit := model.Commit{
 		TreeHash:   treeHash,
-		ParentHash: "TODO",
+		ParentHash: utils.GetLatestCommitHash(),
 		Author:     "TODO - none for MVP",
 		Message:    message,
 		Timestamp:  time.Now().Unix(),
 	}
 
 	treeSerialized := tree.Serialize()
-	err := utils.WriteObject("trees", treeHash, treeSerialized) //TODO - if same hash exist, the metadata changes
+	err := utils.WriteObject("trees", treeHash, treeSerialized) //.got/objects/trees
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,6 +43,7 @@ func Commit(message string) {
 	}
 
 	utils.AddEntryInCommitsFile(commitsPath, commitHash, commit)
+	utils.AddEntryInHead(commitHash)
 
 	err = utils.ClearFile(stagingPath)
 	if err != nil {
