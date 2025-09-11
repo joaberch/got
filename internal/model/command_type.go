@@ -9,7 +9,6 @@ const (
 	CmdVersion
 	CmdInit
 	CmdAdd
-	CmdStatus
 	CmdCommit
 	CmdRestore
 )

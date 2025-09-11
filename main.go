@@ -29,8 +29,6 @@ func main() {
 		if len(args) > 1 {
 			cmd.Add(args[1])
 		}
-	case model.CmdStatus:
-		cmd.Status()
 	case model.CmdCommit:
 		if len(args) > 1 {
 			cmd.Commit(args[1])
