@@ -8,6 +8,7 @@ import (
 	"os"
 )
 
+// missing commit message or missing restore hash terminate the program via log.Fatal.
 func main() {
 	args := os.Args[1:]
 	if len(args) < 1 {
