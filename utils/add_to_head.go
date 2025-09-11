@@ -6,7 +6,9 @@ import (
 	"path/filepath"
 )
 
-// AddToHead changes the latest commit hash in the head file
+// AddToHead clears the .got/head file and writes hash as the current HEAD commit hash.
+// It first empties the head file (via ClearFile) and then writes the provided hash (written as-is; no trailing newline).
+// Any error encountered while clearing, opening, writing, or closing the file causes the program to exit via log.Fatal.
 func AddToHead(hash string) {
 	headPath := filepath.Join(".got", "head")
 	err := ClearFile(headPath)

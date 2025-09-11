@@ -8,7 +8,14 @@ import (
 	"time"
 )
 
-// Commit creates the commit and it's objects
+// Commit creates a new commit from the current staging state.
+//
+// It builds the tree and blob objects from .got/staging.csv, writes the tree and commit
+// objects into the object store, appends the new commit to .got/commits.csv, updates HEAD,
+// and clears the staging file.
+//
+// The message parameter is used as the commit message. On write/serialization failures the
+// function calls log.Fatal and terminates the program.
 func Commit(message string) {
 	stagingPath := filepath.Join(".got", "staging.csv")
 	commitsPath := filepath.Join(".got", "commits.csv")

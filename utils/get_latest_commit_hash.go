@@ -7,7 +7,10 @@ import (
 	"path/filepath"
 )
 
-// GetLatestCommitHash returns the hash of the latest commit
+// GetLatestCommitHash reads the file ".got/head" and returns its entire contents as a string.
+// Each line in the file is appended with a trailing newline in the returned value.
+// If the file cannot be opened or closed, the function logs the error and exits the process via log.Fatal.
+// If the file is empty, an empty string is returned.
 func GetLatestCommitHash() string {
 	headPath := filepath.Join(".got", "head")
 	file, err := os.Open(headPath)

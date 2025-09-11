@@ -7,7 +7,8 @@ import (
 	"path/filepath"
 )
 
-// AddToStaging adds an entry in the staging.csv file
+// AddToStaging appends a CSV record to the .got/staging.csv file containing the provided
+// hash and path (written in that order). The file is created if it does not already exist.
 func AddToStaging(path string, hash string) {
 	stagingPath := filepath.Join(".got", "staging.csv")
 

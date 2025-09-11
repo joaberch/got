@@ -2,7 +2,8 @@ package cmd
 
 import "fmt"
 
-// ShowHelp display the help
+// ShowHelp prints the command-line help and usage information for Got to standard output.
+// The message includes available commands, short forms, usage examples, and the project source URL.
 func ShowHelp() {
 	fmt.Println("Got - A simple version control system\n" +
 		"\n" +
