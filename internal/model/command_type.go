@@ -1,5 +1,6 @@
 package model
 
+// CommandType enumerates every possible command
 type CommandType int
 
 const (

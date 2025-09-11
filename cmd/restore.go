@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 )
 
+// Restore the file from the commit version
 func Restore(commitHash string) {
 	objectPath := filepath.Join(".got", "objects", "commits", commitHash)
 

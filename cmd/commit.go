@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// Commit creates the commit and it's objects
 func Commit(message string) {
 	stagingPath := filepath.Join(".got", "staging.csv")
 	commitsPath := filepath.Join(".got", "commits.csv")
@@ -35,15 +36,15 @@ func Commit(message string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	commitHash := commit.Hash() //TODO - redundant in serialization
+	commitHash := commit.Hash(commitSerialized)
 
 	err = utils.WriteObject("commits", commitHash, commitSerialized)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	utils.AddEntryInCommitsFile(commitsPath, commitHash, commit)
-	utils.AddEntryInHead(commitHash)
+	utils.AddToCommits(commitsPath, commitHash, commit)
+	utils.AddToHead(commitHash)
 
 	err = utils.ClearFile(stagingPath)
 	if err != nil {

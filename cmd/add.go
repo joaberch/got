@@ -5,9 +5,10 @@ import (
 	"Got/utils"
 )
 
+// Add a file in the staging area
 func Add(path string) {
 	//Read the file
-	contents := utils.StreamFile(path)
+	contents := utils.GetFileContent(path)
 
 	blob := model.Blob{
 		Content: contents,
@@ -17,5 +18,5 @@ func Add(path string) {
 	blob.GenerateHash()
 
 	//Add (the relative path, hash, (perm)) to staging.csv
-	utils.AddEntryInStagingFile(path, blob.Hash)
+	utils.AddToStaging(path, blob.Hash)
 }

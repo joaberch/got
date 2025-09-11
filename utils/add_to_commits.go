@@ -8,7 +8,8 @@ import (
 	"os"
 )
 
-func AddEntryInCommitsFile(commitsPath string, commitHash string, commit model.Commit) {
+// AddToCommits adds an entry in the commits.csv file
+func AddToCommits(commitsPath string, commitHash string, commit model.Commit) {
 	file, err := os.OpenFile(commitsPath, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)

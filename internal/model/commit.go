@@ -4,9 +4,9 @@ import (
 	"crypto/sha1"
 	"encoding/json"
 	"fmt"
-	"log"
 )
 
+// Commit is an object to store the data of the commit
 type Commit struct {
 	TreeHash   string
 	ParentHash string
@@ -15,15 +15,11 @@ type Commit struct {
 	Timestamp  int64
 }
 
-// Serialize the commit object in json
+// Serialize the commit object in JSON
 func (commit *Commit) Serialize() ([]byte, error) {
 	return json.Marshal(commit)
 }
 
-func (commit *Commit) Hash() string {
-	data, err := commit.Serialize()
-	if err != nil {
-		log.Fatal(err)
-	}
+func (commit *Commit) Hash(data []byte) string {
 	return fmt.Sprintf("%x", sha1.Sum(data))
 }

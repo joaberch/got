@@ -7,7 +7,8 @@ import (
 	"path/filepath"
 )
 
-func AddEntryInStagingFile(path string, hash string) {
+// AddToStaging adds an entry in the staging.csv file
+func AddToStaging(path string, hash string) {
 	stagingPath := filepath.Join(".got", "staging.csv")
 
 	file, err := os.OpenFile(stagingPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)

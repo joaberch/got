@@ -6,7 +6,8 @@ import (
 	"path/filepath"
 )
 
-func AddEntryInHead(hash string) {
+// AddToHead changes the latest commit hash in the head file
+func AddToHead(hash string) {
 	headPath := filepath.Join(".got", "head")
 	err := ClearFile(headPath)
 	if err != nil {

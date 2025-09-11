@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+// ReadStagingFile returns the staging area as a tree
 func ReadStagingFile(path string) model.Tree {
 	tree := model.Tree{}
 

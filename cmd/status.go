@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 )
 
+// Status displays the status of the staging area
 func Status() {
 	stagingPath := filepath.Join(".got", "staging.csv")
 	file, err := os.Open(stagingPath)

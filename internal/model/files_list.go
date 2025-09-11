@@ -1,5 +1,6 @@
 package model
 
+// FilesList lists all the mandatory file/folder
 var FilesList = map[string]string{
 	"staging.csv":     "File",   //Staging area
 	"commits.csv":     "File",   //Tracking file state

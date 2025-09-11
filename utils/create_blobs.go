@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+// CreateBlobs creates an 'objects/blobs/..' foreach file in the tree given
 func CreateBlobs(tree model.Tree) {
 	for _, entry := range tree.Entries {
 		content, err := os.ReadFile(entry.Name)

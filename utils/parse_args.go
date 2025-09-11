@@ -2,6 +2,7 @@ package utils
 
 import "Got/internal/model"
 
+// ParseArgs process each argument given
 func ParseArgs(args []string) model.ParsedArgs {
 	parsed := model.ParsedArgs{
 		Command: model.CmdNone,
