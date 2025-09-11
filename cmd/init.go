@@ -19,15 +19,22 @@ func Init() {
 	}
 
 	for name, fileType := range model.FilesList { //Create mandatory files/folder
-		fullpath := filepath.Join(pwd + "/.got/" + name)
+		fullPath := filepath.Join(pwd + "/.got/" + name)
 
 		if fileType == "Folder" {
-			err = os.MkdirAll(fullpath, 0755)
+			err = os.MkdirAll(fullPath, 0755)
 			if err != nil {
 				log.Fatal(err)
 			}
 		} else if fileType == "File" {
-			_, err = os.Create(fullpath)
+			//Create the parent folder if it doesn't exist
+			parentDir := filepath.Dir(fullPath)
+			err = os.MkdirAll(parentDir, 0755)
+			if err != nil {
+				log.Fatal(err)
+			}
+			
+			_, err = os.Create(fullPath)
 			if err != nil {
 				log.Fatal(err)
 			}
