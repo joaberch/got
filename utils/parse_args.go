@@ -1,8 +1,14 @@
 package utils
 
-import "Got/internal/model"
+import "github.com/joaberch/got/internal/model"
 
-// ParseArgs process each argument given
+// ParseArgs parses a slice of argument tokens and returns a model.ParsedArgs
+// whose Command field is set to the last recognized command token.
+//
+// Supported tokens (short and long forms): "help"/"h", "version"/"v",
+// "init"/"i", "add"/"a", "commit"/"c", "restore"/"r". Unrecognized tokens are
+// ignored; if no supported token is found, the returned ParsedArgs has
+// Command == model.CmdNone.
 func ParseArgs(args []string) model.ParsedArgs {
 	parsed := model.ParsedArgs{
 		Command: model.CmdNone,

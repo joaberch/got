@@ -1,13 +1,14 @@
 package main
 
 import (
-	"Got/cmd"
-	"Got/internal/model"
-	"Got/utils"
+	"github.com/joaberch/got/cmd"
+	"github.com/joaberch/got/internal/model"
+	"github.com/joaberch/got/utils"
 	"log"
 	"os"
 )
 
+// missing commit message or missing restore hash terminate the program via log.Fatal.
 func main() {
 	args := os.Args[1:]
 	if len(args) < 1 {

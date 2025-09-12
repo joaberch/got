@@ -1,14 +1,19 @@
 package cmd
 
 import (
-	"Got/internal/model"
-	"Got/utils"
+	"github.com/joaberch/got/internal/model"
+	"github.com/joaberch/got/utils"
 	"log"
 	"os"
 	"path/filepath"
 )
 
-// Init the got folder with the mandatory files and folder
+// Init initializes a .got directory in the current working directory.
+// 
+// If the current working directory cannot be determined or a .got directory
+// already exists, the function logs a fatal error and exits the process.
+// Otherwise it creates the mandatory files and folders defined in
+// model.FilesList under the newly created .got directory using utils.CreateFilePath.
 func Init() {
 	pwd, err := os.Getwd() //get current folder
 	if err != nil {

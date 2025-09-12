@@ -1,14 +1,21 @@
 package cmd
 
 import (
-	"Got/utils"
 	"fmt"
+	"github.com/joaberch/got/utils"
 	"log"
 	"os"
 	"path/filepath"
 )
 
-// Restore the file from the commit version
+// Restore restores working-tree files from the commit identified by commitHash.
+// 
+// Restore reads the commit object at ".got/objects/commits/<commitHash>", loads the
+// commit's tree object, then writes each blob referenced by the tree into the
+// current working directory using the entry's Name (file mode 0644).
+//
+// commitHash is the hash of the commit object to restore.
+// The function exits the program via log.Fatal on any read/deserialize/write error.
 func Restore(commitHash string) {
 	objectPath := filepath.Join(".got", "objects", "commits", commitHash)
 
