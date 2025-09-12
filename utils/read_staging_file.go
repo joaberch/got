@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"Got/internal/model"
 	"encoding/csv"
+	"github.com/joaberch/got/internal/model"
 	"log"
 	"os"
 )

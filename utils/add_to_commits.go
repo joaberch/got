@@ -1,9 +1,9 @@
 package utils
 
 import (
-	"Got/internal/model"
 	"encoding/csv"
 	"fmt"
+	"github.com/joaberch/got/internal/model"
 	"log"
 	"os"
 )

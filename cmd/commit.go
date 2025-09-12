@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"Got/internal/model"
-	"Got/utils"
+	"github.com/joaberch/got/internal/model"
+	"github.com/joaberch/got/utils"
 	"log"
 	"path/filepath"
 	"time"

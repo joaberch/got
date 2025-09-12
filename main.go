@@ -1,9 +1,9 @@
 package main
 
 import (
-	"Got/cmd"
-	"Got/internal/model"
-	"Got/utils"
+	"github.com/joaberch/got/cmd"
+	"github.com/joaberch/got/internal/model"
+	"github.com/joaberch/got/utils"
 	"log"
 	"os"
 )

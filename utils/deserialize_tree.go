@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"Got/internal/model"
 	"encoding/json"
+	"github.com/joaberch/got/internal/model"
 )
 
 // DeserializeTree unmarshals JSON-encoded data into a model.Tree and returns a pointer to it.

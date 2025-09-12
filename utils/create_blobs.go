@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"Got/internal/model"
+	"github.com/joaberch/got/internal/model"
 	"log"
 	"os"
 )

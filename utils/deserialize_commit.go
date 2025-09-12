@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"Got/internal/model"
 	"encoding/json"
+	"github.com/joaberch/got/internal/model"
 )
 
 // DeserializeCommit deserializes JSON-encoded data into a model.Commit and returns

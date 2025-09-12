@@ -1,6 +1,6 @@
 package utils
 
-import "Got/internal/model"
+import "github.com/joaberch/got/internal/model"
 
 // ParseArgs parses a slice of argument tokens and returns a model.ParsedArgs
 // whose Command field is set to the last recognized command token.

@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"Got/utils"
 	"fmt"
+	"github.com/joaberch/got/utils"
 	"log"
 	"os"
 	"path/filepath"
