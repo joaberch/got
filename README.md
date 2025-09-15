@@ -1,5 +1,6 @@
 # Got
 [![Go Report Card](https://goreportcard.com/badge/github.com/joaberch/got)](https://goreportcard.com/report/github.com/joaberch/got)
+
 A minimalist version control system built in Go.
 
 ---
