@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/joaberch/got/internal/model"
 	"github.com/joaberch/got/utils"
+	"log"
 )
 
 // Add stages the file at the given path by creating a blob from its contents
@@ -14,7 +15,10 @@ import (
 // an error.
 func Add(path string) {
 	//Read the file
-	contents := utils.GetFileContent(path)
+	contents, err := utils.GetFileContent(path)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	blob := model.Blob{
 		Content: contents,
@@ -24,5 +28,8 @@ func Add(path string) {
 	blob.GenerateHash()
 
 	//Add (the relative path, hash, (perm)) to staging.csv
-	utils.AddToStaging(path, blob.Hash)
+	err = utils.AddToStaging(path, blob.Hash)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

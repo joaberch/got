@@ -20,21 +20,32 @@ func Commit(message string) {
 	stagingPath := filepath.Join(".got", "staging.csv")
 	commitsPath := filepath.Join(".got", "commits.csv")
 
-	tree := utils.ReadStagingFile(stagingPath)
+	tree, err := utils.ReadStagingFile(stagingPath)
+	if err != nil {
+		log.Fatal(err)
+	}
 	treeHash := tree.GenerateHash()
 
-	utils.CreateBlobs(tree) //.got/objects/blobs
+	err = utils.CreateBlobs(tree) //.got/objects/blobs
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	latestCommitHash, err := utils.GetLatestCommitHash()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	commit := model.Commit{
 		TreeHash:   treeHash,
-		ParentHash: utils.GetLatestCommitHash(),
+		ParentHash: latestCommitHash,
 		Author:     "TODO - none for MVP",
 		Message:    message,
 		Timestamp:  time.Now().Unix(),
 	}
 
 	treeSerialized := tree.Serialize()
-	err := utils.WriteObject("trees", treeHash, treeSerialized) //.got/objects/trees
+	err = utils.WriteObject("trees", treeHash, treeSerialized) //.got/objects/trees
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -50,8 +61,15 @@ func Commit(message string) {
 		log.Fatal(err)
 	}
 
-	utils.AddToCommits(commitsPath, commitHash, commit)
-	utils.AddToHead(commitHash)
+	err = utils.AddToCommits(commitsPath, commitHash, commit)
+	if err != nil {
+		log.Fatal(err)
+	}
+	headPath := filepath.Join(".got", "head")
+	err = utils.AddToHead(headPath, commitHash)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	err = utils.ClearFile(stagingPath)
 	if err != nil {

@@ -26,5 +26,5 @@ func ShowHelp() {
 		"  got status\n" +
 		"  got restore abc123\n" +
 		"\n" +
-		"Source code at https://github.com/joaberch/Got")
+		"Source code at https://github.com/joaberch/got")
 }

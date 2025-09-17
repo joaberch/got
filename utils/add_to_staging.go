@@ -2,24 +2,23 @@ package utils
 
 import (
 	"encoding/csv"
-	"log"
 	"os"
 	"path/filepath"
 )
 
 // AddToStaging appends a CSV record to the .got/staging.csv file containing the provided
 // hash and path (written in that order). The file is created if it does not already exist.
-func AddToStaging(path string, hash string) {
+func AddToStaging(path string, hash string) error {
 	stagingPath := filepath.Join(".got", "staging.csv")
 
 	file, err := os.OpenFile(stagingPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer func() {
-		err = file.Close()
-		if err != nil {
-			log.Fatal(err)
+		errClose := file.Close()
+		if errClose != nil {
+			err = errClose
 		}
 	}()
 
@@ -28,6 +27,7 @@ func AddToStaging(path string, hash string) {
 
 	err = writer.Write([]string{hash, path})
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+	return nil
 }
