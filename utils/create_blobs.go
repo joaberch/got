@@ -10,14 +10,14 @@ import (
 // Each entry is expected to provide Name (filesystem path) and Hash (blob identifier).
 func CreateBlobs(tree model.Tree) error {
 	for _, entry := range tree.Entries {
+		//entry.Name = path to real file
+		//entry.Hash = blob name to create
 		content, err := os.ReadFile(entry.Name)
 		if err != nil {
 			return err
 		}
 
-		blobHash := entry.Hash
-
-		err = WriteObject("blobs", blobHash, content)
+		err = WriteObject("blobs", entry.Hash, content)
 		if err != nil {
 			return err
 		}
