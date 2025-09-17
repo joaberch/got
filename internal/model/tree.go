@@ -4,6 +4,7 @@ import (
 	"crypto/sha1"
 	"encoding/json"
 	"fmt"
+	"log"
 )
 
 // Tree stores all the data of each file
@@ -13,22 +14,22 @@ type Tree struct {
 }
 
 // GenerateHash using data
-func (tree Tree) GenerateHash() (string, error) {
+func (tree Tree) GenerateHash() string {
 	data, err := json.Marshal(tree.Entries)
 	if err != nil {
-		return tree.Hash, err
+		log.Fatal(err)
 	}
 
 	sum := sha1.Sum(data)
 	tree.Hash = fmt.Sprintf("%x", sum)
-	return tree.Hash, nil
+	return tree.Hash
 }
 
 // Serialize the data in json
-func (tree Tree) Serialize() ([]byte, error) {
+func (tree Tree) Serialize() []byte {
 	data, err := json.Marshal(tree)
 	if err != nil {
-		return []byte{}, err
+		log.Fatal(err)
 	}
-	return data, nil
+	return data
 }
