@@ -3,7 +3,6 @@ package cmd
 import (
 	"github.com/joaberch/got/internal/model"
 	"github.com/joaberch/got/utils"
-	"log"
 	"path/filepath"
 	"time"
 )
@@ -16,24 +15,24 @@ import (
 //
 // The message parameter is used as the commit message. On write/serialization failures the
 // function calls log.Fatal and terminates the program.
-func Commit(message string) {
+func Commit(message string) error {
 	stagingPath := filepath.Join(".got", "staging.csv")
 	commitsPath := filepath.Join(".got", "commits.csv")
 
 	tree, err := utils.ReadStagingFile(stagingPath)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	treeHash := tree.GenerateHash()
 
 	err = utils.CreateBlobs(tree) //.got/objects/blobs
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	latestCommitHash, err := utils.GetLatestCommitHash()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	commit := model.Commit{
@@ -47,32 +46,33 @@ func Commit(message string) {
 	treeSerialized := tree.Serialize()
 	err = utils.WriteObject("trees", treeHash, treeSerialized) //.got/objects/trees
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	commitSerialized, err := commit.Serialize()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	commitHash := commit.Hash(commitSerialized)
 
 	err = utils.WriteObject("commits", commitHash, commitSerialized)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	err = utils.AddToCommits(commitsPath, commitHash, commit)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	headPath := filepath.Join(".got", "head")
 	err = utils.AddToHead(headPath, commitHash)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	err = utils.ClearFile(stagingPath)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+	return nil
 }
