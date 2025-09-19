@@ -1,4 +1,4 @@
-package cmd
+package cmd_test
 
 import (
 	"github.com/joaberch/got/cmd"
@@ -79,7 +79,10 @@ func TestCommit_Success(t *testing.T) {
 	}
 
 	//Act
-	cmd.Commit("My message")
+	err = cmd.Commit("My message")
+	if err != nil {
+		t.Fatalf("Failed to commit message: %v", err)
+	}
 
 	//Check empty staging file
 	content, err := os.ReadFile(stagingPath)
