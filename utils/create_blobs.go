@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"github.com/joaberch/got/internal/model"
 	"os"
 )
@@ -14,12 +15,12 @@ func CreateBlobs(tree model.Tree) error {
 		//entry.Hash = blob name to create (file name)
 		content, err := os.ReadFile(entry.Name)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to read file at %s: %w", entry.Name, err)
 		}
 
 		err = WriteObject("blobs", entry.Hash, content)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to write to blobs file at %s: %w", entry.Name, err)
 		}
 	}
 	return nil

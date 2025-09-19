@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/csv"
+	"fmt"
 	"github.com/joaberch/got/internal/model"
 	"os"
 )
@@ -19,19 +20,19 @@ func ReadStagingFile(path string) (model.Tree, error) {
 
 	file, err := os.Open(path)
 	if err != nil {
-		return tree, err
+		return tree, fmt.Errorf("failed to open file: %w", err)
 	}
 	defer func(file *os.File) {
 		errClose := file.Close()
 		if errClose != nil {
-			err = errClose
+			err = fmt.Errorf("failed to close file: %w", errClose)
 		}
 	}(file)
 
 	reader := csv.NewReader(file)
 	records, err := reader.ReadAll()
 	if err != nil {
-		return tree, err
+		return tree, fmt.Errorf("failed to read file: %w", err)
 	}
 	for _, record := range records {
 		if len(record) < 2 {

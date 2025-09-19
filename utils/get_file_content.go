@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"os"
 )
 
@@ -10,7 +11,7 @@ import (
 func GetFileContent(path string) ([]byte, error) {
 	contents, err := os.ReadFile(path)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read file at %s: %w", path, err)
 	}
 
 	return contents, nil

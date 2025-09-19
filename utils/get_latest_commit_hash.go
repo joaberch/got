@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -14,12 +15,12 @@ func GetLatestCommitHash() (string, error) {
 	headPath := filepath.Join(".got", "head")
 	file, err := os.Open(headPath)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to open head file at %s: %w", headPath, err)
 	}
 	defer func() {
 		errClose := file.Close()
 		if errClose != nil {
-			err = errClose
+			err = fmt.Errorf("failed to close head file at %s: %w", headPath, errClose)
 		}
 	}()
 

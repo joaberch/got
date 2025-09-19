@@ -18,12 +18,12 @@ import (
 func AddToCommits(commitsPath string, commitHash string, commit model.Commit) error {
 	file, err := os.OpenFile(commitsPath, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to open commits file at %s: %w", commitsPath, err)
 	}
 	defer func() {
 		errClose := file.Close()
 		if errClose != nil {
-			err = errClose
+			err = fmt.Errorf("failed to  close commits file at %s: %w", commitsPath, errClose)
 		}
 	}()
 
@@ -38,7 +38,7 @@ func AddToCommits(commitsPath string, commitHash string, commit model.Commit) er
 		fmt.Sprintf("%d", commit.Timestamp),
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to write to commits file at %s: %w", commitsPath, err)
 	}
 	return nil
 }

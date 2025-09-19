@@ -1,9 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/joaberch/got/internal/model"
 	"github.com/joaberch/got/utils"
-	"log"
 	"os"
 	"path/filepath"
 )
@@ -17,20 +17,19 @@ import (
 func Init() error {
 	pwd, err := os.Getwd() //get current folder
 	if err != nil {
-		return err
+		return fmt.Errorf("error getting working directory: %s", err)
 	}
 	gotPath := filepath.Join(pwd, ".got")
 
 	if _, err = os.Stat(gotPath); !os.IsNotExist(err) { //Check if already exist
-		log.Println("This directory already exists")
-		return err
+		return fmt.Errorf("this directory already exists: %s: %s", gotPath, err)
 	}
 
 	for name, fileType := range model.FilesList { //Create mandatory files/folder
 		fullPath := filepath.Join(gotPath, name)
 		err = utils.CreateFilePath(fullPath, fileType)
 		if err != nil {
-			return err
+			return fmt.Errorf("error creating file %s: %s", name, err)
 		}
 	}
 	return nil

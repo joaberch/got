@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/joaberch/got/internal/model"
 	"github.com/joaberch/got/utils"
 	"path/filepath"
@@ -21,21 +22,21 @@ func Commit(message string) error {
 
 	tree, err := utils.ReadStagingFile(stagingPath)
 	if err != nil {
-		return err
+		return fmt.Errorf("error reading staging file: %s", err)
 	}
 	treeHash, err := tree.GenerateHash()
 	if err != nil {
-		return err
+		return fmt.Errorf("error generating tree hash: %s", err)
 	}
 
 	err = utils.CreateBlobs(tree) //.got/objects/blobs
 	if err != nil {
-		return err
+		return fmt.Errorf("error creating blobs: %s", err)
 	}
 
 	latestCommitHash, err := utils.GetLatestCommitHash()
 	if err != nil {
-		return err
+		return fmt.Errorf("error getting latest commit hash: %s", err)
 	}
 
 	commit := model.Commit{
@@ -48,37 +49,37 @@ func Commit(message string) error {
 
 	treeSerialized, err := tree.Serialize()
 	if err != nil {
-		return err
+		return fmt.Errorf("error serializing tree: %s", err)
 	}
 	err = utils.WriteObject("trees", treeHash, treeSerialized) //.got/objects/trees
 	if err != nil {
-		return err
+		return fmt.Errorf("error writing trees: %s", err)
 	}
 
 	commitSerialized, err := commit.Serialize()
 	if err != nil {
-		return err
+		return fmt.Errorf("error serializing commit: %s", err)
 	}
 	commitHash := commit.Hash(commitSerialized)
 
 	err = utils.WriteObject("commits", commitHash, commitSerialized)
 	if err != nil {
-		return err
+		return fmt.Errorf("error writing commits: %s", err)
 	}
 
 	err = utils.AddToCommits(commitsPath, commitHash, commit)
 	if err != nil {
-		return err
+		return fmt.Errorf("error adding to commits: %s", err)
 	}
 	headPath := filepath.Join(".got", "head")
 	err = utils.AddToHead(headPath, commitHash)
 	if err != nil {
-		return err
+		return fmt.Errorf("error adding to head: %s", err)
 	}
 
 	err = utils.ClearFile(stagingPath)
 	if err != nil {
-		return err
+		return fmt.Errorf("error clearing staging file: %s", err)
 	}
 	return nil
 }

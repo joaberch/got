@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/csv"
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -13,12 +14,12 @@ func AddToStaging(path string, hash string) error {
 
 	file, err := os.OpenFile(stagingPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to open staging file at %s: %w", stagingPath, err)
 	}
 	defer func() {
 		errClose := file.Close()
 		if errClose != nil {
-			err = errClose
+			err = fmt.Errorf("failed to close staging file at %s: %w", stagingPath, errClose)
 		}
 	}()
 
@@ -27,7 +28,7 @@ func AddToStaging(path string, hash string) error {
 
 	err = writer.Write([]string{path, hash})
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to write to staging file at %s: %w", stagingPath, err)
 	}
 	return nil
 }

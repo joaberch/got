@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"github.com/joaberch/got/internal/model"
 	"github.com/joaberch/got/utils"
 	"strings"
@@ -22,7 +23,7 @@ func Add(path string) error {
 	//Read the file
 	contents, err := utils.GetFileContent(path)
 	if err != nil {
-		return err
+		return fmt.Errorf("error getting file contents: %s", err)
 	}
 
 	blob := model.Blob{
@@ -35,7 +36,7 @@ func Add(path string) error {
 	//Add (the relative path, hash, (perm)) to staging.csv
 	err = utils.AddToStaging(path, blob.Hash)
 	if err != nil {
-		return err
+		return fmt.Errorf("error adding to staging file: %s", err)
 	}
 	return nil
 }

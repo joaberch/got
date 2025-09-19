@@ -16,7 +16,7 @@ type Tree struct {
 func (tree Tree) GenerateHash() (string, error) {
 	data, err := json.Marshal(tree.Entries)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error generating tree hash: %v", err)
 	}
 
 	sum := sha1.Sum(data)
@@ -28,7 +28,7 @@ func (tree Tree) GenerateHash() (string, error) {
 func (tree Tree) Serialize() ([]byte, error) {
 	data, err := json.Marshal(tree)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error serializing tree: %v", err)
 	}
 	return data, nil
 }

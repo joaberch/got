@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"os"
 )
 
@@ -10,23 +11,23 @@ import (
 func AddToHead(headPath string, hash string) error {
 	err := ClearFile(headPath)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to clear file %s: %w", headPath, err)
 	}
 
 	file, err := os.OpenFile(headPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to open file %s: %w", headPath, err)
 	}
 	defer func() {
 		closeErr := file.Close()
 		if closeErr != nil {
-			err = closeErr
+			err = fmt.Errorf("failed to close file %s: %w", headPath, closeErr)
 		}
 	}()
 
 	_, err = file.WriteString(hash)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to write to commits file at %s: %w", headPath, err)
 	}
 	return nil
 }

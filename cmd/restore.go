@@ -20,34 +20,34 @@ func Restore(commitHash string) error {
 
 	data, err := os.ReadFile(objectPath)
 	if err != nil {
-		return err
+		return fmt.Errorf("error reading file %s: %s", objectPath, err)
 	}
 	commit, err := utils.DeserializeCommit(data)
 	if err != nil {
-		return err
+		return fmt.Errorf("error deserializing commit: %s", err)
 	}
 
 	treePath := filepath.Join(".got", "objects", "trees", commit.TreeHash)
 	treeData, err := os.ReadFile(treePath)
 	if err != nil {
-		return err
+		return fmt.Errorf("error reading tree file %s: %s", treePath, err)
 	}
 
 	tree, err := utils.DeserializeTree(treeData)
 	if err != nil {
-		return err
+		return fmt.Errorf("error deserializing tree %s: %s", treePath, err)
 	}
 
 	for _, entry := range tree.Entries {
 		blobPath := filepath.Join(".got", "objects", "blobs", entry.Hash)
 		blobData, err := os.ReadFile(blobPath)
 		if err != nil {
-			return err
+			return fmt.Errorf("error reading blob file %s: %s", blobPath, err)
 		}
 
 		err = os.WriteFile(entry.Name, blobData, 0644)
 		if err != nil {
-			return err
+			return fmt.Errorf("error writing blob file %s: %s", blobPath, err)
 		}
 	}
 	fmt.Println("Files restored")
