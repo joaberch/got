@@ -3,7 +3,6 @@ package cmd
 import "fmt"
 
 // ShowHelp prints the command-line help and usage information for Got to standard output.
-// ShowHelp prints the command-line help and usage information for Got to standard output.
 // The output includes the tool title, usage line, available commands with short forms,
 // example commands, and the project source URL.
 func ShowHelp() {
