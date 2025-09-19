@@ -11,8 +11,8 @@ import (
 func CreateBlobs(tree model.Tree) error {
 	for _, entry := range tree.Entries {
 		//entry.Name = path to real file
-		//entry.Hash = blob name to create
-		content, err := os.ReadFile(entry.Hash)
+		//entry.Hash = blob name to create (file name)
+		content, err := os.ReadFile(entry.Name)
 		if err != nil {
 			return err
 		}

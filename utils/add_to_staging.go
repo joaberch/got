@@ -25,7 +25,7 @@ func AddToStaging(path string, hash string) error {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	err = writer.Write([]string{hash, path})
+	err = writer.Write([]string{path, hash})
 	if err != nil {
 		return err
 	}
