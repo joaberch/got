@@ -5,53 +5,36 @@ import (
 	"fmt"
 	"github.com/joaberch/got/utils"
 	"os"
-	"path/filepath"
-	"strings"
 )
 
 func Diff() error {
 	//head -> contains latest commit hash
-	headPath := filepath.Join(".got", "head")
-	headHashBytes, err := os.ReadFile(headPath)
+	headHash, err := utils.GetLatestCommitHash()
 	if err != nil {
-		return fmt.Errorf("error reading head file: %s", err)
+		return fmt.Errorf("failed to get latest commit hash: %v", err)
 	}
-	headHash := strings.TrimSpace(string(headHashBytes))
 
 	//Commit -> contains tree hash
-	commitPath := filepath.Join(".got", "objects", "commits", headHash)
-	commitData, err := os.ReadFile(commitPath)
+	commit, err := utils.GetCommitFromHash(headHash)
 	if err != nil {
-		return fmt.Errorf("error reading commit file: %s", err)
-	}
-	commit, err := utils.DeserializeCommit(commitData)
-	if err != nil {
-		return fmt.Errorf("error deserializing commit: %s", err)
+		return fmt.Errorf("failed to get commit: %v", err)
 	}
 
 	//Tree -> contains hash of blob(s)
-	treePath := filepath.Join(".got", "objects", "trees", commit.TreeHash)
-	treeData, err := os.ReadFile(treePath)
-	if err != nil {
-		return fmt.Errorf("error reading tree file: %s", err)
-	}
-	tree, err := utils.DeserializeTree(treeData)
-	if err != nil {
-		return fmt.Errorf("error deserializing trees: %s", err)
-	}
+	tree, err := utils.GetTreeFromCommit(commit)
 
 	//Compare each file in the tree with its current version
 	for _, entry := range tree.Entries {
-		blobPath := filepath.Join(".got", "objects", "blobs", entry.Hash)
-		committedData, err := os.ReadFile(blobPath)
+		committedBlob, err := utils.GetBlobFromHash(entry.Hash)
+		committedData := committedBlob.Content
 		if err != nil {
-			fmt.Printf("error reading blob file %s: %s", blobPath, err)
+			fmt.Printf("error reading blob file %s: %s", entry.Name, err)
 			continue
 		}
 
 		currentData, err := os.ReadFile(entry.Name)
 		if err != nil {
-			fmt.Printf("error reading blob file %s: %s", blobPath, err)
+			fmt.Printf("error reading blob file %s: %s", entry.Name, err)
 			continue
 		}
 
