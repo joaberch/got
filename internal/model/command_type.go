@@ -12,4 +12,5 @@ const (
 	CmdCommit
 	CmdRestore
 	CmdLog
+	CmdDiff
 )

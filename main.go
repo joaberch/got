@@ -45,6 +45,8 @@ func main() {
 		}
 	case model.CmdLog:
 		err = cmd.Log()
+	case model.CmdDiff:
+		err = cmd.Diff()
 	}
 
 	if err != nil {
