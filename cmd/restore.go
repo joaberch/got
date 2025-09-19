@@ -8,13 +8,17 @@ import (
 )
 
 // Restore restores working-tree files from the commit identified by commitHash.
-//
-// Restore reads the commit object at ".got/objects/commits/<commitHash>", loads the
-// commit's tree object, then writes each blob referenced by the tree into the
-// current working directory using the entry's Name (file mode 0644).
+// 
+// It reads the commit object at ".got/objects/commits/<commitHash>", deserializes it
+// to obtain the root tree hash, reads and deserializes the tree object at
+// ".got/objects/trees/<treeHash>", then writes each blob found in
+// ".got/objects/blobs/<blobHash>" to the working directory using the entry's Name
+// with file mode 0644.
 //
 // commitHash is the hash of the commit object to restore.
-// The function exits the program via log.Fatal on any read/deserialize/write error.
+//
+// Returns an error if any read, deserialization, or write operation fails. On
+// success the function prints "Files restored" and returns nil.
 func Restore(commitHash string) error {
 	objectPath := filepath.Join(".got", "objects", "commits", commitHash)
 

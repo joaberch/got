@@ -7,6 +7,13 @@ import (
 	"os"
 )
 
+// Diff compares the current working-tree files against the latest commit and prints per-file line-based
+// differences for any files that have changed.
+//
+// It resolves the latest commit, walks the commit tree, and for each tree entry compares the committed blob
+// content to the current file on disk. Per-entry read errors are printed and that entry is skipped.
+//
+// Returns an error only if resolving the latest commit hash or the commit object fails; otherwise it returns nil.
 func Diff() error {
 	//head -> contains latest commit hash
 	headHash, err := utils.GetLatestCommitHash()

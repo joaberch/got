@@ -7,8 +7,11 @@ import (
 	"path/filepath"
 )
 
-// AddToStaging appends a CSV record to the .got/staging.csv file containing the provided
-// hash and path (written in that order). The file is created if it does not already exist.
+// AddToStaging appends a CSV record [path, hash] to the .got/staging.csv file, creating the file if it does not exist.
+// 
+// It returns a non-nil error if the staging file cannot be opened or the record cannot be written. The function
+// flushes the CSV writer and attempts to close the file; close errors are captured internally but are not reliably
+// propagated as the returned error.
 func AddToStaging(path string, hash string) error {
 	stagingPath := filepath.Join(".got", "staging.csv")
 

@@ -8,7 +8,10 @@ import (
 	"os"
 )
 
-// missing commit message or missing restore hash terminate the program via log.Fatal.
+// main is the CLI entry point. It parses command-line arguments, dispatches the requested
+// subcommand (help, version, init, add, commit, restore, log, diff) to the cmd package,
+// and exits with a non-zero status if a command returns an error. Missing required
+// arguments for commit and restore cause an immediate fatal exit with an explanatory message.
 func main() {
 	var err error
 	args := os.Args[1:]
