@@ -10,6 +10,7 @@ func ShowLineDiff(old string, new string) {
 	newLines := strings.Split(new, "\n")
 
 	maxLen := max(len(oldLines), len(newLines))
+
 	for i := 0; i < maxLen; i++ {
 		var oldLine, newLine string
 		if i < len(oldLines) {

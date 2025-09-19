@@ -41,6 +41,8 @@ func Diff() error {
 		if !bytes.Equal(currentData, committedData) {
 			fmt.Printf("Diff for %s:\n", entry.Name)
 			utils.ShowLineDiff(string(committedData), string(currentData))
+		} else {
+			fmt.Printf("No changes from the last commit")
 		}
 	}
 	return nil
