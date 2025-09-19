@@ -13,7 +13,11 @@ import (
 // If the current working directory cannot be determined or a .got directory
 // already exists, the function logs a fatal error and exits the process.
 // Otherwise, it creates the mandatory files and folders defined in
-// model.FilesList under the newly created .got directory using utils.CreateFilePath.
+// Init creates a ".got" directory in the current working directory and populates it
+// with the mandatory files and folders defined in model.FilesList using
+// utils.CreateFilePath. It returns an error if the working directory cannot be
+// determined, if the ".got" directory already exists, or if creating any required
+// file or directory fails.
 func Init() error {
 	pwd, err := os.Getwd() //get current folder
 	if err != nil {

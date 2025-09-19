@@ -10,6 +10,10 @@ import (
 	"strings"
 )
 
+// Log reads commits from the repository metadata file (.got/commits.csv) and displays each valid commit.
+// It skips CSV rows with fewer than five fields. The function returns an error if the commits file cannot
+// be read, if the CSV cannot be parsed, or if a commit timestamp cannot be converted to an int64. On
+// success it returns nil.
 func Log() error {
 	commitsPath := filepath.Join(".got", "commits.csv")
 	contents, err := utils.GetFileContent(commitsPath)
