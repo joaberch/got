@@ -29,6 +29,8 @@ func ParseArgs(args []string) model.ParsedArgs {
 			parsed.Command = model.CmdCommit
 		case "restore", "r":
 			parsed.Command = model.CmdRestore
+		case "log", "l":
+			parsed.Command = model.CmdLog
 		}
 	}
 

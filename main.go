@@ -43,6 +43,8 @@ func main() {
 		} else {
 			log.Fatal("You need to specify the hash of the file you want to restore")
 		}
+	case model.CmdLog:
+		err = cmd.Log()
 	}
 
 	if err != nil {
