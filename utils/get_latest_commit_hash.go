@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // GetLatestCommitHash reads the file ".got/head" and returns its entire contents as a string.
@@ -28,7 +29,7 @@ func GetLatestCommitHash() (string, error) {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
-		content += line + "\n"
+		content += line + ""
 	}
-	return content, nil
+	return strings.TrimSpace(content), nil
 }
