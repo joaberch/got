@@ -5,10 +5,6 @@ import (
 	"os"
 )
 
-// AddToHead clears the .got/head file and writes hash as the current HEAD commit hash.
-// It first empties the head file (via ClearFile) and then writes the provided hash (written as-is; no trailing newline).
-// AddToHead clears the file at headPath and writes hash as the new HEAD value.
-// 
 // AddToHead removes any existing content in headPath, opens (or creates) the file
 // with mode 0644, and writes the provided hash exactly as given (no trailing
 // newline). It returns a wrapped error if clearing the file, opening it, or
