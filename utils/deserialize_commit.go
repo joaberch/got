@@ -5,8 +5,6 @@ import (
 	"github.com/joaberch/got/internal/model"
 )
 
-// DeserializeCommit deserializes JSON-encoded data into a model.Commit and returns
-// a pointer to the resulting Commit along with any error produced by json.Unmarshal.
 // DeserializeCommit deserializes JSON-encoded data into a model.Commit.
 // 
 // The input `data` must contain a JSON representation of model.Commit. The
