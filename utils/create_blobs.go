@@ -12,7 +12,7 @@ func CreateBlobs(tree model.Tree) error {
 	for _, entry := range tree.Entries {
 		//entry.Name = path to real file
 		//entry.Hash = blob name to create
-		content, err := os.ReadFile(entry.Name)
+		content, err := os.ReadFile(entry.Hash)
 		if err != nil {
 			return err
 		}
