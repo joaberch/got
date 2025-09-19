@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"errors"
 	"github.com/joaberch/got/internal/model"
 	"github.com/joaberch/got/utils"
+	"strings"
 )
 
 // Add stages the file at the given path by creating a blob from its contents
@@ -13,6 +15,10 @@ import (
 // entry (path and hash) into the staging area. This function does not return
 // an error.
 func Add(path string) error {
+	if strings.Contains(path, ".got") {
+		return errors.New("path contains '.got', got doesn't process itself")
+	}
+
 	//Read the file
 	contents, err := utils.GetFileContent(path)
 	if err != nil {
