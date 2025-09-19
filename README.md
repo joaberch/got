@@ -77,6 +77,11 @@ got restore abc123commithash    # Restore the file from commit hash
 got log                         # Display the log
 ```
 
+### Display differences from last commit
+```
+got diff                        # Display the differences in the file from the latest commit
+```
+
 ---
 
 ## Requirements
