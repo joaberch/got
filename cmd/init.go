@@ -8,11 +8,6 @@ import (
 	"path/filepath"
 )
 
-// Init initializes a .got directory in the current working directory.
-//
-// If the current working directory cannot be determined or a .got directory
-// already exists, the function logs a fatal error and exits the process.
-// Otherwise, it creates the mandatory files and folders defined in
 // Init creates a ".got" directory in the current working directory and populates it
 // with the mandatory files and folders defined in model.FilesList using
 // utils.CreateFilePath. It returns an error if the working directory cannot be
