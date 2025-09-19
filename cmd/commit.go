@@ -8,13 +8,6 @@ import (
 	"time"
 )
 
-// Commit creates a new commit from the current staging state.
-//
-// It builds the tree and blob objects from .got/staging.csv, writes the tree and commit
-// objects into the object store, appends the new commit to .got/commits.csv, updates HEAD,
-// and clears the staging file.
-//
-// The message parameter is used as the commit message. On write/serialization failures the
 // Commit creates a new commit from the current staging state (.got/staging.csv) and updates the repository.
 //
 // It reads the staging file, generates a tree and its blobs, writes the tree and commit objects to the object store,
