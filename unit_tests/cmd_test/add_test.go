@@ -76,11 +76,11 @@ func TestAdd_Success(t *testing.T) {
 	hash := sha1.New()
 	hash.Write(content)
 	expectedHash := hex.EncodeToString(hash.Sum(nil))
-	if records[0][0] != expectedHash {
+	if records[0][1] != expectedHash {
 		t.Fatalf("Expected 'Hello World', got '%s'", records[0][0])
 	}
 
-	if records[0][1] != "file.txt" {
+	if records[0][0] != "file.txt" {
 		t.Fatalf("Expected 'file.txt', got '%s'", records[0][1])
 	}
 }
