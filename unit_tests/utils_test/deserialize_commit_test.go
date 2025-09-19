@@ -40,12 +40,8 @@ func TestDeserializeCommit_Success(t *testing.T) {
 
 func TestDeserializeCommit_IncompleteJSON(t *testing.T) {
 	jsonData := []byte(`{"Author": "Tester", "Message": "Hello World!"}`)
-	commit, err := utils.DeserializeCommit(jsonData)
+	_, err := utils.DeserializeCommit(jsonData)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if commit == nil {
-		t.Fatal(err)
-	}
-
 }

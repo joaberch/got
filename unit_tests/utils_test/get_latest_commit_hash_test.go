@@ -91,7 +91,7 @@ func TestGetLatestCommitHash_Success(t *testing.T) {
 	}()
 
 	headPath := filepath.Join(gotDir, "head")
-	expected := "abc123\n"
+	expected := "abc123"
 	err = os.WriteFile(headPath, []byte(expected), 0644)
 	if err != nil {
 		t.Fatalf("Could not create file %s: %s", headPath, err)
