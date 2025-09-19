@@ -56,8 +56,8 @@ func TestReadStagingFile_Success(t *testing.T) {
 
 	writer := csv.NewWriter(tmpFile)
 	err = writer.WriteAll([][]string{
-		{"hash123", "path/to/file.txt"},
-		{"hash456", "path/to/data.csv"},
+		{"path/to/file.txt", "hash123"},
+		{"path/to/data.csv", "hash456"},
 	})
 	if err != nil {
 		t.Fatal(err)

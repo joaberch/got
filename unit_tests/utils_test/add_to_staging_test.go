@@ -82,7 +82,7 @@ func TestAddToStaging_Success(t *testing.T) {
 		t.Fatalf("expected 1 record, got %d", len(records))
 	}
 
-	expected := []string{"hash123", "path/to/file.txt"}
+	expected := []string{"path/to/file.txt", "hash123"}
 	for i, val := range expected {
 		if records[0][i] != val {
 			t.Fatalf("expected %s, got %s", val, records[0][i])
