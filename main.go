@@ -26,7 +26,7 @@ func main() {
 	case model.CmdVersion:
 		cmd.ShowVersion()
 	case model.CmdInit:
-		cmd.Init()
+		err = cmd.Init()
 	case model.CmdAdd:
 		if len(args) > 1 {
 			err = cmd.Add(args[1])
@@ -39,7 +39,7 @@ func main() {
 		}
 	case model.CmdRestore:
 		if len(args) > 1 {
-			cmd.Restore(args[1])
+			err = cmd.Restore(args[1])
 		} else {
 			log.Fatal("You need to specify the hash of the file you want to restore")
 		}

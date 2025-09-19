@@ -14,23 +14,24 @@ import (
 // already exists, the function logs a fatal error and exits the process.
 // Otherwise, it creates the mandatory files and folders defined in
 // model.FilesList under the newly created .got directory using utils.CreateFilePath.
-func Init() {
+func Init() error {
 	pwd, err := os.Getwd() //get current folder
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	gotPath := filepath.Join(pwd, ".got")
 
 	if _, err = os.Stat(gotPath); !os.IsNotExist(err) { //Check if already exist
-		log.Fatal("This directory already exists")
-		return
+		log.Println("This directory already exists")
+		return err
 	}
 
 	for name, fileType := range model.FilesList { //Create mandatory files/folder
 		fullPath := filepath.Join(gotPath, name)
 		err = utils.CreateFilePath(fullPath, fileType)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 	}
+	return nil
 }

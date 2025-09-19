@@ -23,7 +23,10 @@ func Commit(message string) error {
 	if err != nil {
 		return err
 	}
-	treeHash := tree.GenerateHash()
+	treeHash, err := tree.GenerateHash()
+	if err != nil {
+		return err
+	}
 
 	err = utils.CreateBlobs(tree) //.got/objects/blobs
 	if err != nil {
@@ -43,7 +46,10 @@ func Commit(message string) error {
 		Timestamp:  time.Now().Unix(),
 	}
 
-	treeSerialized := tree.Serialize()
+	treeSerialized, err := tree.Serialize()
+	if err != nil {
+		return err
+	}
 	err = utils.WriteObject("trees", treeHash, treeSerialized) //.got/objects/trees
 	if err != nil {
 		return err

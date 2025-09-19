@@ -3,54 +3,53 @@ package cmd
 import (
 	"fmt"
 	"github.com/joaberch/got/utils"
-	"log"
 	"os"
 	"path/filepath"
 )
 
 // Restore restores working-tree files from the commit identified by commitHash.
-// 
+//
 // Restore reads the commit object at ".got/objects/commits/<commitHash>", loads the
 // commit's tree object, then writes each blob referenced by the tree into the
 // current working directory using the entry's Name (file mode 0644).
 //
 // commitHash is the hash of the commit object to restore.
 // The function exits the program via log.Fatal on any read/deserialize/write error.
-func Restore(commitHash string) {
+func Restore(commitHash string) error {
 	objectPath := filepath.Join(".got", "objects", "commits", commitHash)
 
 	data, err := os.ReadFile(objectPath)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
-
 	commit, err := utils.DeserializeCommit(data)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	treePath := filepath.Join(".got", "objects", "trees", commit.TreeHash)
 	treeData, err := os.ReadFile(treePath)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	tree, err := utils.DeserializeTree(treeData)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	for _, entry := range tree.Entries {
 		blobPath := filepath.Join(".got", "objects", "blobs", entry.Hash)
 		blobData, err := os.ReadFile(blobPath)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 
 		err = os.WriteFile(entry.Name, blobData, 0644)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 	}
 	fmt.Println("Files restored")
+	return nil
 }
