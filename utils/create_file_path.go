@@ -6,12 +6,6 @@ import (
 	"path/filepath"
 )
 
-// CreateFilePath creates a directory or file at the given path.
-//
-// If fileType is "Folder", it creates the directory tree rooted at fullPath.
-// If fileType is "File", it ensures the parent directory exists and creates an empty file at fullPath.
-// For any other fileType value the function does nothing.
-//
 // CreateFilePath creates filesystem entries at fullPath according to fileType.
 // 
 // If fileType == "Folder", it creates the directory tree at fullPath (mkdir -p semantics).
