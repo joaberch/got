@@ -7,13 +7,6 @@ import (
 	"os"
 )
 
-// AddToCommits appends a commit record to the CSV file at the given path.
-//
-// It writes a single CSV row containing: commitHash, commit.TreeHash, commit.Author,
-// commit.Message, and commit.Timestamp (as a decimal string). commitsPath is the
-// filesystem path to the CSV file; commitHash is the commit's hash, and commit
-// supplies the remaining fields.
-//
 // AddToCommits appends a single commit record as a CSV row to the file at commitsPath.
 // 
 // The written row fields (in order) are: commitHash, commit.TreeHash, commit.Author,
