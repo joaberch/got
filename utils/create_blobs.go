@@ -1,26 +1,27 @@
 package utils
 
 import (
+	"fmt"
 	"github.com/joaberch/got/internal/model"
-	"log"
 	"os"
 )
 
 // CreateBlobs reads each file referenced by tree.Entries and writes its content as a blob object named by the entry's Hash into the objects/blobs store.
 // If reading or writing any entry fails, the function logs the error and exits the program.
 // Each entry is expected to provide Name (filesystem path) and Hash (blob identifier).
-func CreateBlobs(tree model.Tree) {
+func CreateBlobs(tree model.Tree) error {
 	for _, entry := range tree.Entries {
+		//entry.Name = path to real file
+		//entry.Hash = blob name to create (file name)
 		content, err := os.ReadFile(entry.Name)
 		if err != nil {
-			log.Fatal(err)
+			return fmt.Errorf("failed to read file at %s: %w", entry.Name, err)
 		}
 
-		blobHash := entry.Hash
-
-		err = WriteObject("blobs", blobHash, content)
+		err = WriteObject("blobs", entry.Hash, content)
 		if err != nil {
-			log.Fatal(err)
+			return fmt.Errorf("failed to write to blobs file at %s: %w", entry.Name, err)
 		}
 	}
+	return nil
 }

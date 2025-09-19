@@ -1,9 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/joaberch/got/internal/model"
 	"github.com/joaberch/got/utils"
-	"log"
 	"path/filepath"
 	"time"
 )
@@ -16,45 +16,70 @@ import (
 //
 // The message parameter is used as the commit message. On write/serialization failures the
 // function calls log.Fatal and terminates the program.
-func Commit(message string) {
+func Commit(message string) error {
 	stagingPath := filepath.Join(".got", "staging.csv")
 	commitsPath := filepath.Join(".got", "commits.csv")
 
-	tree := utils.ReadStagingFile(stagingPath)
-	treeHash := tree.GenerateHash()
+	tree, err := utils.ReadStagingFile(stagingPath)
+	if err != nil {
+		return fmt.Errorf("error reading staging file: %s", err)
+	}
+	treeHash, err := tree.GenerateHash()
+	if err != nil {
+		return fmt.Errorf("error generating tree hash: %s", err)
+	}
 
-	utils.CreateBlobs(tree) //.got/objects/blobs
+	err = utils.CreateBlobs(tree) //.got/objects/blobs
+	if err != nil {
+		return fmt.Errorf("error creating blobs: %s", err)
+	}
+
+	latestCommitHash, err := utils.GetLatestCommitHash()
+	if err != nil {
+		return fmt.Errorf("error getting latest commit hash: %s", err)
+	}
 
 	commit := model.Commit{
 		TreeHash:   treeHash,
-		ParentHash: utils.GetLatestCommitHash(),
+		ParentHash: latestCommitHash,
 		Author:     "TODO - none for MVP",
 		Message:    message,
 		Timestamp:  time.Now().Unix(),
 	}
 
-	treeSerialized := tree.Serialize()
-	err := utils.WriteObject("trees", treeHash, treeSerialized) //.got/objects/trees
+	treeSerialized, err := tree.Serialize()
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("error serializing tree: %s", err)
+	}
+	err = utils.WriteObject("trees", treeHash, treeSerialized) //.got/objects/trees
+	if err != nil {
+		return fmt.Errorf("error writing trees: %s", err)
 	}
 
 	commitSerialized, err := commit.Serialize()
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("error serializing commit: %s", err)
 	}
 	commitHash := commit.Hash(commitSerialized)
 
 	err = utils.WriteObject("commits", commitHash, commitSerialized)
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("error writing commits: %s", err)
 	}
 
-	utils.AddToCommits(commitsPath, commitHash, commit)
-	utils.AddToHead(commitHash)
+	err = utils.AddToCommits(commitsPath, commitHash, commit)
+	if err != nil {
+		return fmt.Errorf("error adding to commits: %s", err)
+	}
+	headPath := filepath.Join(".got", "head")
+	err = utils.AddToHead(headPath, commitHash)
+	if err != nil {
+		return fmt.Errorf("error adding to head: %s", err)
+	}
 
 	err = utils.ClearFile(stagingPath)
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("error clearing staging file: %s", err)
 	}
+	return nil
 }

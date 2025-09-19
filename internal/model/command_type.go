@@ -11,4 +11,6 @@ const (
 	CmdAdd
 	CmdCommit
 	CmdRestore
+	CmdLog
+	CmdDiff
 )

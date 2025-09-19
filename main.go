@@ -10,6 +10,7 @@ import (
 
 // missing commit message or missing restore hash terminate the program via log.Fatal.
 func main() {
+	var err error
 	args := os.Args[1:]
 	if len(args) < 1 {
 		cmd.ShowHelp()
@@ -25,22 +26,30 @@ func main() {
 	case model.CmdVersion:
 		cmd.ShowVersion()
 	case model.CmdInit:
-		cmd.Init()
+		err = cmd.Init()
 	case model.CmdAdd:
 		if len(args) > 1 {
-			cmd.Add(args[1])
+			err = cmd.Add(args[1])
 		}
 	case model.CmdCommit:
 		if len(args) > 1 {
-			cmd.Commit(args[1])
+			err = cmd.Commit(args[1])
 		} else {
 			log.Fatal("No commit message specified")
 		}
 	case model.CmdRestore:
 		if len(args) > 1 {
-			cmd.Restore(args[1])
+			err = cmd.Restore(args[1])
 		} else {
 			log.Fatal("You need to specify the hash of the file you want to restore")
 		}
+	case model.CmdLog:
+		err = cmd.Log()
+	case model.CmdDiff:
+		err = cmd.Diff()
+	}
+
+	if err != nil {
+		log.Fatal(err)
 	}
 }

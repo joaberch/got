@@ -1,18 +1,18 @@
 package utils
 
 import (
-	"log"
+	"fmt"
 	"os"
 )
 
 // GetFileContent reads and returns the contents of the file at the given path.
 // If the file cannot be read the function logs the error and calls log.Fatal,
 // causing the program to exit.
-func GetFileContent(path string) []byte {
+func GetFileContent(path string) ([]byte, error) {
 	contents, err := os.ReadFile(path)
 	if err != nil {
-		log.Fatal(err)
+		return nil, fmt.Errorf("failed to read file at %s: %w", path, err)
 	}
 
-	return contents
+	return contents, nil
 }

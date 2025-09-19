@@ -73,6 +73,17 @@ got commit "Initial commit"     # Creates a commit with a message
 got restore abc123commithash    # Restore the file from commit hash
 ```
 
+### Display log
+
+```
+got log                         # Display the log
+```
+
+### Display differences from last commit
+```
+got diff                        # Display the differences in the file from the latest commit
+```
+
 ---
 
 ## Requirements

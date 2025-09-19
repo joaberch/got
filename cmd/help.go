@@ -18,6 +18,8 @@ func ShowHelp() {
 		"  status, s       Show the status of the working directory\n" +
 		"  commit, c <msg> Commit staged changes with a message\n" +
 		"  restore, r <id> Restore a file from a previous commit by hash\n" +
+		"  log, l          Display the log from the commits file\n" +
+		"  diff, d         Display the differences in the file from the last commit" + //TODO - get (distinct) all files from all commits and use all of them for a better diff display
 		"\n" +
 		"Examples:\n" +
 		"  got init\n" +
@@ -25,6 +27,8 @@ func ShowHelp() {
 		"  got commit \"Initial commit\"\n" +
 		"  got status\n" +
 		"  got restore abc123\n" +
+		"  got log\n" +
+		"  got diff\n" +
 		"\n" +
-		"Source code at https://github.com/joaberch/Got")
+		"Source code at https://github.com/joaberch/got")
 }
