@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 )
 
-// AddToStaging appends a CSV record to the .got/staging.csv file containing the provided
 // AddToStaging appends a CSV record [path, hash] to the .got/staging.csv file, creating the file if it does not exist.
 // 
 // It returns a non-nil error if the staging file cannot be opened or the record cannot be written. The function
