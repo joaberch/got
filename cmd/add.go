@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github.com/joaberch/got/internal/model"
 	"github.com/joaberch/got/utils"
+	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -19,23 +21,47 @@ func Add(path string) error {
 		return errors.New("path contains '.got', got doesn't process itself")
 	}
 
-	//Read the file
-	contents, err := utils.GetFileContent(path)
+	f, err := os.Stat(path)
 	if err != nil {
-		return fmt.Errorf("error getting file contents: %s", err)
+		return fmt.Errorf("os.Stat(%s): %v", path, err)
 	}
 
-	blob := model.Blob{
-		Content: contents,
-	}
+	if f.IsDir() { //If dir, recursive
+		entries, err := os.ReadDir(path)
+		if err != nil {
+			return fmt.Errorf("os.ReadDir(%s): %v", path, err)
+		}
 
-	//Get file hash
-	blob.GenerateHash()
+		for _, entry := range entries {
+			entryPath := filepath.Join(path, entry.Name())
+			if strings.Contains(entryPath, ".got") {
+				continue
+			}
 
-	//Add (the relative path, hash, (perm)) to staging.csv
-	err = utils.AddToStaging(path, blob.Hash)
-	if err != nil {
-		return fmt.Errorf("error adding to staging file: %s", err)
+			err = Add(entryPath)
+			if err != nil {
+				return err
+			}
+		}
+	} else {
+		//Read the file
+		contents, err := utils.GetFileContent(path)
+		if err != nil {
+			return fmt.Errorf("error getting file contents: %s", err)
+		}
+
+		blob := model.Blob{
+			Content: contents,
+		}
+
+		//Get file hash
+		blob.GenerateHash()
+
+		//Add (the relative path, hash, (perm)) to staging.csv
+		err = utils.AddToStaging(path, blob.Hash)
+		if err != nil {
+			return fmt.Errorf("error adding to staging file: %s", err)
+		}
 	}
 	return nil
 }
