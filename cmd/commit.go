@@ -80,5 +80,11 @@ func Commit(message string) error {
 	if err != nil {
 		return fmt.Errorf("error clearing staging file: %s", err)
 	}
+
+	err = utils.UpdateIndexedPaths(tree)
+	if err != nil {
+		return fmt.Errorf("error updating indexed paths: %s", err)
+	}
+
 	return nil
 }
