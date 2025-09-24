@@ -31,21 +31,21 @@ func ParseArgs(args []string) model.ParsedArgs {
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
 		switch arg {
-		case "help", "h":
+		case "help":
 			parsed.Command = model.CmdHelp
-		case "version", "v":
+		case "version":
 			parsed.Command = model.CmdVersion
-		case "init", "i":
+		case "init":
 			parsed.Command = model.CmdInit
-		case "add", "a":
+		case "add":
 			parsed.Command = model.CmdAdd
-		case "commit", "c":
+		case "commit":
 			parsed.Command = model.CmdCommit
-		case "restore", "r":
+		case "restore":
 			parsed.Command = model.CmdRestore
-		case "log", "l":
+		case "log":
 			parsed.Command = model.CmdLog
-		case "diff", "d":
+		case "diff":
 			parsed.Command = model.CmdDiff
 		}
 	}
