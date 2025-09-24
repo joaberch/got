@@ -4,8 +4,8 @@ A minimalist version control system built in Go.
 ---
 
 ## Features
-- Initializes a local repository
-- Add files to staging area and commit it with a message
+- Initialize a local repository
+- Add files to the staging area and commit it with a message
 - View current status of tracked files
 - Restore previous commits using its hash
 - Pure Go CLI with **0** external dependencies
@@ -16,9 +16,9 @@ A minimalist version control system built in Go.
 
 ### Windows
 
-1. **Download the latest release from *[Github Releases](https://github.com/joaberch/got/releases)***
-2. **Extract the ZIP archive**
-3. **Run ``setup-windows.bat`` as an administrator**.
+1. **Download the latest release from *[GitHub Releases](https://github.com/joaberch/got/releases)***
+2. **Extract the ZIP archive.**
+3. **Run ``setup-windows.bat`` as an administrator.**
 
 This will :
 - Move the binary to a ``utils`` folder in the user directory.
@@ -29,9 +29,9 @@ This will :
 > - Add that folder to the system ``PATH``
 
 ### Linux / MacOS
-1. **Download the latest release from *[Github Releases](https://github.com/joaberch/got/releases)***.
-2. Extract the TAR archive.
-3. Run the setup script : `bash setup-linux.sh`.
+1. **Download the latest release from *[GitHub Releases](https://github.com/joaberch/got/releases)***.
+2. **Extract the TAR archive.**
+3. **Run the setup script : `bash setup-linux.sh`.**
 
 This will :
 - Move the binary to `~/utils`.
@@ -95,7 +95,7 @@ got diff                        # Display the differences in the file from the l
 - [x] Basic init/stage/commit
 - [x] Restore commit
 - [ ] Use the branch system
-- [ ] got diff
+- [x] got diff
 - [ ] Push on remote server
 - [ ] Restore using a more user-friendly way
 
