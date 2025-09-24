@@ -29,27 +29,64 @@ func Diff() error {
 
 	//Tree -> contains hash of blob(s)
 	tree, err := utils.GetTreeFromCommit(commit)
+	if err != nil {
+		return fmt.Errorf("failed to get tree: %v", err)
+	}
 
-	//Compare each file in the tree with its current version
+	stagedEntries, err := utils.GetStagedEntries()
+	if err != nil {
+		return err
+	}
+
+	commitedFiles := make(map[string]string)
 	for _, entry := range tree.Entries {
-		committedBlob, err := utils.GetBlobFromHash(entry.Hash)
-		committedData := committedBlob.Content
+		commitedFiles[entry.Name] = entry.Hash
+	}
+
+	//Detect the modified file
+	for name, hash := range commitedFiles {
+		commitedBlob, err := utils.GetBlobFromHash(hash)
 		if err != nil {
-			fmt.Printf("error reading blob file %s: %s", entry.Name, err)
+			fmt.Printf("failed to get commited blob: %v", err)
 			continue
 		}
 
-		currentData, err := os.ReadFile(entry.Name)
+		currentData, err := os.ReadFile(name)
 		if err != nil {
-			fmt.Printf("error reading blob file %s: %s", entry.Name, err)
+			fmt.Printf("failed to read file: %v", err)
 			continue
 		}
 
-		if !bytes.Equal(currentData, committedData) {
-			fmt.Printf("Diff for %s:\n", entry.Name)
-			utils.ShowLineDiff(string(committedData), string(currentData))
-		} else {
-			fmt.Printf("No changes from the last commit")
+		if !bytes.Equal(currentData, commitedBlob.Content) {
+			fmt.Printf("Modified file: %s\n", name)
+			utils.ShowLineDiff(string(commitedBlob.Content), string(currentData))
+		}
+	}
+
+	//Detect the added file
+	for _, stagedPath := range stagedEntries {
+		if _, exists := commitedFiles[stagedPath]; !exists {
+			fmt.Printf("New file staged: %s\n", stagedPath)
+			currentData, err := os.ReadFile(stagedPath)
+			if err != nil {
+				fmt.Printf("failed to read file: %v", err)
+			}
+			utils.ShowLineDiff("", string(currentData))
+		}
+	}
+
+	//Detect the deleted file
+	for name, hash := range commitedFiles {
+		_, err = os.Stat(name)
+		if os.IsNotExist(err) {
+			fmt.Printf("Deleted file: %s\n", name)
+
+			commitedBlob, err := utils.GetBlobFromHash(hash)
+			if err != nil {
+				fmt.Printf("failed to get commited blob: %v", err)
+				continue
+			}
+			utils.ShowLineDiff(string(commitedBlob.Content), "")
 		}
 	}
 	return nil
