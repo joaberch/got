@@ -30,8 +30,9 @@ func ShowLineDiff(old string, new string) {
 				fmt.Printf("\033[31m [%d] - %s\033[0m\n", i+1, oldLine)
 			}
 			if newLine != "" {
-				fmt.Printf("\033[32m [%d] + %s\033[0m\n\n", i+1, newLine)
+				fmt.Printf("\033[32m [%d] + %s\033[0m\n", i+1, newLine)
 			}
 		}
 	}
+	fmt.Println()
 }
