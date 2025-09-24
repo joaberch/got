@@ -6,6 +6,7 @@ import (
 	"github.com/joaberch/got/internal/model"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // UpdateIndexedPaths appends the distinct file from the tree in the 'indexed_paths.csv'
@@ -13,7 +14,7 @@ func UpdateIndexedPaths(tree model.Tree) error {
 	indexPath := filepath.Join(".got", "indexed_paths.csv")
 
 	//Get the already indexed
-	existing := make(map[string]bool)
+	existing := make(map[string]string)
 	if _, err := os.Stat(indexPath); err == nil {
 		file, err := os.Open(indexPath)
 		if err != nil {
@@ -28,11 +29,18 @@ func UpdateIndexedPaths(tree model.Tree) error {
 
 		scanner := bufio.NewScanner(file)
 		for scanner.Scan() {
-			existing[scanner.Text()] = true
+			parts := strings.Split(scanner.Text(), ",")
+			if len(parts) == 2 {
+				existing[parts[0]] = parts[1]
+			}
 		}
 	}
 
-	file, err := os.OpenFile(indexPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	for _, entry := range tree.Entries {
+		existing[entry.Name] = entry.Hash
+	}
+
+	file, err := os.OpenFile(indexPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return fmt.Errorf("error opening indexed path: %s", err)
 	}
@@ -44,12 +52,10 @@ func UpdateIndexedPaths(tree model.Tree) error {
 	}()
 
 	writer := bufio.NewWriter(file)
-	for _, entry := range tree.Entries {
-		if !existing[entry.Name] {
-			_, err = writer.WriteString(entry.Name + "\n")
-			if err != nil {
-				return fmt.Errorf("error writing to indexed path: %s", err)
-			}
+	for name, hash := range existing {
+		_, err := writer.WriteString(fmt.Sprintf("%s,%s\n", name, hash))
+		if err != nil {
+			return fmt.Errorf("error writing to indexed path: %s", err)
 		}
 	}
 	return writer.Flush()

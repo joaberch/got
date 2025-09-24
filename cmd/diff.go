@@ -14,7 +14,7 @@ import (
 // content to the current file on disk. Per-entry read errors are printed and that entry is skipped.
 //
 // Returns an error only if resolving the latest commit hash or the commit object fails; otherwise it returns nil.
-func Diff() error {
+func Diff() error { //TODO - parameter to display error
 	//head -> contains latest commit hash
 	headHash, err := utils.GetLatestCommitHash()
 	if err != nil {
@@ -38,28 +38,39 @@ func Diff() error {
 		return err
 	}
 
+	indexedMap, err := utils.GetIndexedPathsWithHash()
+	if err != nil {
+		return fmt.Errorf("failed to get indexed paths: %v", err)
+	}
+
 	commitedFiles := make(map[string]string)
 	for _, entry := range tree.Entries {
 		commitedFiles[entry.Name] = entry.Hash
 	}
 
-	//Detect the modified file
-	for name, hash := range commitedFiles {
-		commitedBlob, err := utils.GetBlobFromHash(hash)
-		if err != nil {
-			fmt.Printf("failed to get commited blob: %v", err)
+	for path, lastBlobHash := range indexedMap {
+		currentData, err := os.ReadFile(path)
+		if os.IsNotExist(err) {
+			fmt.Printf("Deleted file: %s\n", path)
+			committedBlob, err := utils.GetBlobFromHash(lastBlobHash)
+			if err == nil {
+				utils.ShowLineDiff(string(committedBlob.Content), "")
+			}
+			continue
+		} else if err != nil {
+			fmt.Printf("Failed to get committed blob: %v", err)
 			continue
 		}
 
-		currentData, err := os.ReadFile(name)
+		committedBlob, err := utils.GetBlobFromHash(lastBlobHash)
 		if err != nil {
-			fmt.Printf("failed to read file: %v", err)
+			fmt.Printf("Failed to get committed blob: %v", err)
 			continue
 		}
 
-		if !bytes.Equal(currentData, commitedBlob.Content) {
-			fmt.Printf("Modified file: %s\n", name)
-			utils.ShowLineDiff(string(commitedBlob.Content), string(currentData))
+		if !bytes.Equal(committedBlob.Content, currentData) {
+			fmt.Printf("Modified file: %s\n", path)
+			utils.ShowLineDiff(string(committedBlob.Content), string(currentData))
 		}
 	}
 
@@ -70,24 +81,11 @@ func Diff() error {
 			currentData, err := os.ReadFile(stagedPath)
 			if err != nil {
 				fmt.Printf("failed to read file: %v", err)
+				continue
 			}
 			utils.ShowLineDiff("", string(currentData))
 		}
 	}
 
-	//Detect the deleted file
-	for name, hash := range commitedFiles {
-		_, err = os.Stat(name)
-		if os.IsNotExist(err) {
-			fmt.Printf("Deleted file: %s\n", name)
-
-			commitedBlob, err := utils.GetBlobFromHash(hash)
-			if err != nil {
-				fmt.Printf("failed to get commited blob: %v", err)
-				continue
-			}
-			utils.ShowLineDiff(string(commitedBlob.Content), "")
-		}
-	}
 	return nil
 }
