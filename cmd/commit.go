@@ -23,6 +23,9 @@ func Commit(message string) error {
 	if err != nil {
 		return fmt.Errorf("error reading staging file: %s", err)
 	}
+	if len(tree.Entries) == 0 {
+		return fmt.Errorf("cannot commit: staging area is empty")
+	}
 	treeHash, err := tree.GenerateHash()
 	if err != nil {
 		return fmt.Errorf("error generating tree hash: %s", err)
