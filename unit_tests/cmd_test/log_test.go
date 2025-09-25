@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -63,11 +64,7 @@ def456,tree2,Tester,second commit,738275835`
 
 	output := buf.String()
 
-	if !contains(output, "Commit : abc123") || !contains(output, "Commit : def456") {
+	if !strings.Contains(output, "Commit : abc123") || !strings.Contains(output, "Commit : def456") {
 		t.Fatalf("output does not contain expected commit")
 	}
-}
-
-func contains(s, substr string) bool {
-	return bytes.Contains([]byte(s), []byte(substr))
 }

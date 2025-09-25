@@ -3,7 +3,6 @@ package utils
 import (
 	"fmt"
 	"github.com/joaberch/got/internal/model"
-	"os"
 	"path/filepath"
 )
 
@@ -12,13 +11,13 @@ import (
 // Returns an error if the file cannot be read or if deserialization fails.
 func GetCommitFromHash(hash string) (model.Commit, error) {
 	commitPath := filepath.Join(".got", "objects", "commits", hash)
-	data, err := os.ReadFile(commitPath)
+	data, err := GetFileContent(commitPath)
 	if err != nil {
-		return model.Commit{}, fmt.Errorf("error reading commit file a commit needs to be done first to see the differences %s: %s", commitPath, err)
+		return model.Commit{}, fmt.Errorf("error reading commit %s: %w", commitPath, err)
 	}
 	commit, err := DeserializeCommit(data)
 	if err != nil {
-		return model.Commit{}, fmt.Errorf("error parsing commit file %s: %s", commitPath, err)
+		return model.Commit{}, fmt.Errorf("error parsing commit file %s: %w", commitPath, err)
 	}
 	return commit, nil
 }

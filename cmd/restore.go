@@ -8,7 +8,7 @@ import (
 )
 
 // Restore restores working-tree files from the commit identified by commitHash.
-// 
+//
 // It reads the commit object at ".got/objects/commits/<commitHash>", deserializes it
 // to obtain the root tree hash, reads and deserializes the tree object at
 // ".got/objects/trees/<treeHash>", then writes each blob found in
@@ -17,12 +17,12 @@ import (
 //
 // commitHash is the hash of the commit object to restore.
 //
-// Returns an error if any read, deserialization, or write operation fails. On
-// success the function prints "Files restored" and returns nil.
+// Returns an error if any read, deserialization, or write operation fails.
+// On success, the function prints "Files restored" and returns nil.
 func Restore(commitHash string) error {
 	objectPath := filepath.Join(".got", "objects", "commits", commitHash)
 
-	data, err := os.ReadFile(objectPath)
+	data, err := utils.GetFileContent(objectPath)
 	if err != nil {
 		return fmt.Errorf("error reading file %s: %s", objectPath, err)
 	}
@@ -32,7 +32,7 @@ func Restore(commitHash string) error {
 	}
 
 	treePath := filepath.Join(".got", "objects", "trees", commit.TreeHash)
-	treeData, err := os.ReadFile(treePath)
+	treeData, err := utils.GetFileContent(treePath)
 	if err != nil {
 		return fmt.Errorf("error reading tree file %s: %s", treePath, err)
 	}
@@ -44,7 +44,7 @@ func Restore(commitHash string) error {
 
 	for _, entry := range tree.Entries {
 		blobPath := filepath.Join(".got", "objects", "blobs", entry.Hash)
-		blobData, err := os.ReadFile(blobPath)
+		blobData, err := utils.GetFileContent(blobPath)
 		if err != nil {
 			return fmt.Errorf("error reading blob file %s: %s", blobPath, err)
 		}

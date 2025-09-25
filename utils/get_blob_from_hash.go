@@ -3,7 +3,6 @@ package utils
 import (
 	"fmt"
 	"github.com/joaberch/got/internal/model"
-	"os"
 	"path/filepath"
 )
 
@@ -12,9 +11,9 @@ import (
 // Returns a non-nil error if the blob file cannot be read.
 func GetBlobFromHash(hash string) (model.Blob, error) {
 	blobPath := filepath.Join(".got", "objects", "blobs", hash)
-	data, err := os.ReadFile(blobPath)
+	data, err := GetFileContent(blobPath)
 	if err != nil {
-		return model.Blob{}, fmt.Errorf("error reading blob file %s: %s", blobPath, err)
+		return model.Blob{}, fmt.Errorf("error reading blob file %s: %w", blobPath, err)
 	}
 	return model.Blob{Content: data}, nil
 }

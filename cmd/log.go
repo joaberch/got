@@ -27,8 +27,7 @@ func Log() error {
 		return fmt.Errorf("error reading file contents: %s", err)
 	}
 
-	for i := 0; i <= len(records)-1; i++ {
-		record := records[i]
+	for _, record := range records {
 		if len(record) < 5 {
 			continue //Skip
 		}

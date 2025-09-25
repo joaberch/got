@@ -17,6 +17,7 @@ func main() {
 	args := os.Args[1:]
 	if len(args) < 1 {
 		cmd.ShowHelp()
+		return
 	}
 
 	parsed := utils.ParseArgs(args)
@@ -33,6 +34,8 @@ func main() {
 	case model.CmdAdd:
 		if len(args) > 1 {
 			err = cmd.Add(args[1])
+		} else {
+			log.Fatal("No path specified for add")
 		}
 	case model.CmdCommit:
 		if len(args) > 1 {

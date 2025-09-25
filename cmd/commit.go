@@ -21,24 +21,24 @@ func Commit(message string) error {
 
 	tree, err := utils.ReadStagingFile(stagingPath)
 	if err != nil {
-		return fmt.Errorf("error reading staging file: %s", err)
+		return fmt.Errorf("error reading staging file: %w", err)
 	}
 	if len(tree.Entries) == 0 {
 		return fmt.Errorf("cannot commit: staging area is empty")
 	}
 	treeHash, err := tree.GenerateHash()
 	if err != nil {
-		return fmt.Errorf("error generating tree hash: %s", err)
+		return fmt.Errorf("error generating tree hash: %w", err)
 	}
 
 	err = utils.CreateBlobs(tree) //.got/objects/blobs
 	if err != nil {
-		return fmt.Errorf("error creating blobs: %s", err)
+		return fmt.Errorf("error creating blobs: %w", err)
 	}
 
 	latestCommitHash, err := utils.GetLatestCommitHash()
 	if err != nil {
-		return fmt.Errorf("error getting latest commit hash: %s", err)
+		return fmt.Errorf("error getting latest commit hash: %w", err)
 	}
 
 	commit := model.Commit{
@@ -51,42 +51,42 @@ func Commit(message string) error {
 
 	treeSerialized, err := tree.Serialize()
 	if err != nil {
-		return fmt.Errorf("error serializing tree: %s", err)
+		return fmt.Errorf("error serializing tree: %w", err)
 	}
 	err = utils.WriteObject("trees", treeHash, treeSerialized) //.got/objects/trees
 	if err != nil {
-		return fmt.Errorf("error writing trees: %s", err)
+		return fmt.Errorf("error writing trees: %w", err)
 	}
 
 	commitSerialized, err := commit.Serialize()
 	if err != nil {
-		return fmt.Errorf("error serializing commit: %s", err)
+		return fmt.Errorf("error serializing commit: %w", err)
 	}
 	commitHash := commit.Hash(commitSerialized)
 
 	err = utils.WriteObject("commits", commitHash, commitSerialized)
 	if err != nil {
-		return fmt.Errorf("error writing commits: %s", err)
+		return fmt.Errorf("error writing commits: %w", err)
 	}
 
 	err = utils.AddToCommits(commitsPath, commitHash, commit)
 	if err != nil {
-		return fmt.Errorf("error adding to commits: %s", err)
+		return fmt.Errorf("error adding to commits: %w", err)
 	}
 	headPath := filepath.Join(".got", "head")
 	err = utils.AddToHead(headPath, commitHash)
 	if err != nil {
-		return fmt.Errorf("error adding to head: %s", err)
+		return fmt.Errorf("error adding to head: %w", err)
 	}
 
 	err = utils.ClearFile(stagingPath)
 	if err != nil {
-		return fmt.Errorf("error clearing staging file: %s", err)
+		return fmt.Errorf("error clearing staging file: %w", err)
 	}
 
 	err = utils.UpdateIndexedPaths(tree)
 	if err != nil {
-		return fmt.Errorf("error updating indexed paths: %s", err)
+		return fmt.Errorf("error updating indexed paths: %w", err)
 	}
 
 	return nil

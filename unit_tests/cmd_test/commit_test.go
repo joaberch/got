@@ -40,10 +40,19 @@ func TestCommit_Success(t *testing.T) {
 
 	//Create .got/objects/blobs
 	err = os.MkdirAll(".got/objects/blobs", os.ModePerm)
+	if err != nil {
+		t.Fatalf("Failed to create .got/objects/blobs directory: %v", err)
+	}
 	//Create .got/objects/commits
 	err = os.MkdirAll(".got/objects/commits", os.ModePerm)
+	if err != nil {
+		t.Fatalf("Failed to create .got/objects/commits directory: %v", err)
+	}
 	//Create .got/objects/trees
 	err = os.MkdirAll(".got/objects/trees", os.ModePerm)
+	if err != nil {
+		t.Fatalf("Failed to create .got/objects/trees directory: %v", err)
+	}
 
 	//Create file.txt
 	file, err := os.Create("file.txt")

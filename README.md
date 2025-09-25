@@ -47,38 +47,39 @@ This will :
 
 ### Help and version
 
-```
+```bash
 got help                        # Show help
 got version                     # Show current version
 ```
 
 ### Initialize a repository
 
-```
+```bash
 got init                        # Create a .got repository
 ```
 
 ### Add and commit files
 
-```
+```bash
 got add main.go                 # Add the file to the staging area
 got commit "Initial commit"     # Creates a commit with a message
 ```
 
 ### Restore a file
 
-```
+```bash
 got restore abc123commithash    # Restore the file from commit hash
 ```
 
 ### Display log
 
-```
+```bash
 got log                         # Display the log
 ```
 
 ### Display differences from last commit
-```
+
+```bash
 got diff                        # Display the differences in the file from the latest commit
 ```
 

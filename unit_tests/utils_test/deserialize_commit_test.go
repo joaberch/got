@@ -6,18 +6,11 @@ import (
 )
 
 func TestDeserializeCommit_InvalidJSON(t *testing.T) {
-	jsonData := []byte(`{<?xml version="1.0" encoding="UTF-8" ?>
- <root>
-     <TreeHash>abc123</TreeHash>
-     <Author>Tester</Author>
-     <Message>Hello World!</Message>
-     <Timestamp>1694956800</Timestamp>
- </root>
-}`)
+	jsonData := []byte(`{"TreeHash": ds, invalid, data.`)
 
 	_, err := utils.DeserializeCommit(jsonData)
 	if err == nil {
-		t.Fatal(err)
+		t.Fatal("expected error")
 	}
 }
 

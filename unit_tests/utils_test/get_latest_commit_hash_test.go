@@ -32,7 +32,7 @@ func TestGetLatestCommitHash_NoFile(t *testing.T) {
 }
 
 func TestGetLatestCommitHash_EmptyFile(t *testing.T) {
-	tmpDir := os.TempDir()
+	tmpDir := t.TempDir()
 	gotDir := filepath.Join(tmpDir, ".got")
 	err := os.MkdirAll(gotDir, os.ModePerm)
 	if err != nil {
@@ -77,7 +77,7 @@ func TestGetLatestCommitHash_EmptyFile(t *testing.T) {
 }
 
 func TestGetLatestCommitHash_Success(t *testing.T) {
-	tmpDir := os.TempDir()
+	tmpDir := t.TempDir()
 	gotDir := filepath.Join(tmpDir, ".got")
 	err := os.MkdirAll(gotDir, os.ModePerm)
 	if err != nil {

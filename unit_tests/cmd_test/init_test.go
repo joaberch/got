@@ -18,12 +18,11 @@ func TestInit_Success(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer func() {
-		err = os.Chdir(oldWd)
-		if err != nil {
+	t.Cleanup(func() {
+		if err := os.Chdir(oldWd); err != nil {
 			t.Fatal(err)
 		}
-	}()
+	})
 
 	//FileList
 	err = cmd.Init()

@@ -49,7 +49,7 @@ func Diff() error { //TODO - parameter to display error
 	}
 
 	for path, lastBlobHash := range indexedMap {
-		currentData, err := os.ReadFile(path)
+		currentData, err := utils.GetFileContent(path)
 		if os.IsNotExist(err) {
 			fmt.Printf("Deleted file: %s\n", path)
 			committedBlob, err := utils.GetBlobFromHash(lastBlobHash)
@@ -78,7 +78,7 @@ func Diff() error { //TODO - parameter to display error
 	for _, stagedPath := range stagedEntries {
 		if _, exists := committedFiles[stagedPath]; !exists {
 			fmt.Printf("New file staged: %s\n", stagedPath)
-			currentData, err := os.ReadFile(stagedPath)
+			currentData, err := utils.GetFileContent(stagedPath)
 			if err != nil {
 				fmt.Printf("failed to read file: %v", err)
 				continue

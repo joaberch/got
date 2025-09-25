@@ -23,13 +23,13 @@ func Add(path string) error { //TODO - auto-stage from file already added
 
 	f, err := os.Stat(path)
 	if err != nil {
-		return fmt.Errorf("os.Stat(%s): %v", path, err)
+		return fmt.Errorf("os.Stat(%s): %w", path, err)
 	}
 
 	if f.IsDir() { //If dir, recursive
 		entries, err := os.ReadDir(path)
 		if err != nil {
-			return fmt.Errorf("os.ReadDir(%s): %v", path, err)
+			return fmt.Errorf("os.ReadDir(%s): %w", path, err)
 		}
 
 		for _, entry := range entries {
@@ -47,7 +47,7 @@ func Add(path string) error { //TODO - auto-stage from file already added
 		//Read the file
 		contents, err := utils.GetFileContent(path)
 		if err != nil {
-			return fmt.Errorf("error getting file contents: %s", err)
+			return fmt.Errorf("error getting file contents: %w", err)
 		}
 
 		blob := model.Blob{
@@ -60,7 +60,7 @@ func Add(path string) error { //TODO - auto-stage from file already added
 		//Add (the relative path, hash, (perm)) to staging.csv
 		err = utils.AddToStaging(path, blob.Hash)
 		if err != nil {
-			return fmt.Errorf("error adding to staging file: %s", err)
+			return fmt.Errorf("error adding to staging file: %w", err)
 		}
 	}
 	return nil
