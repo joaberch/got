@@ -102,7 +102,7 @@ got diff                        # Display the differences in the file from the l
 ---
 
 ## Contributing
-Pull requests are welcome!
+Yes!
 
 ---
 

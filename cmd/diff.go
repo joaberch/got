@@ -43,9 +43,9 @@ func Diff() error { //TODO - parameter to display error
 		return fmt.Errorf("failed to get indexed paths: %v", err)
 	}
 
-	commitedFiles := make(map[string]string)
+	committedFiles := make(map[string]string)
 	for _, entry := range tree.Entries {
-		commitedFiles[entry.Name] = entry.Hash
+		committedFiles[entry.Name] = entry.Hash
 	}
 
 	for path, lastBlobHash := range indexedMap {
@@ -76,7 +76,7 @@ func Diff() error { //TODO - parameter to display error
 
 	//Detect the added file
 	for _, stagedPath := range stagedEntries {
-		if _, exists := commitedFiles[stagedPath]; !exists {
+		if _, exists := committedFiles[stagedPath]; !exists {
 			fmt.Printf("New file staged: %s\n", stagedPath)
 			currentData, err := os.ReadFile(stagedPath)
 			if err != nil {

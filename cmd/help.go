@@ -20,7 +20,7 @@ func ShowHelp() {
 		"  commit <msg>			Commit staged changes with a message\n" +
 		"  restore <id>			Restore a file from a previous commit by hash\n" +
 		"  log					Display the log from the commits file\n" +
-		"  diff					Display the differences in the file from the last commit" + //TODO - get (distinct) all files from all commits and use all of them for a better diff display
+		"  diff					Display the differences in the file from the last commit" +
 		"\n" +
 		"Examples:\n" +
 		"  got init\n" +
