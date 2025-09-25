@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// GetIndexedPathsWithHash returns a map of each file processed with their latest hash
 func GetIndexedPathsWithHash() (map[string]string, error) {
 	indexPath := filepath.Join(".got", "indexed_paths.csv")
 	file, err := os.Open(indexPath)
