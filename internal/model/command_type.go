@@ -13,4 +13,5 @@ const (
 	CmdRestore
 	CmdLog
 	CmdDiff
+	CmdSetRemote
 )

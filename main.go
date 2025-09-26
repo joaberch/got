@@ -53,6 +53,8 @@ func main() {
 		err = cmd.Log()
 	case model.CmdDiff:
 		err = cmd.Diff(parsed.Verbose)
+	case model.CmdSetRemote:
+		err = cmd.SetRemote(model.Local, args)
 	}
 
 	if err != nil {
