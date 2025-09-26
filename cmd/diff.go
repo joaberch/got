@@ -13,8 +13,8 @@ import (
 // It resolves the latest commit, walks the commit tree, and for each tree entry compares the committed blob
 // content to the current file on disk. Per-entry read errors are printed and that entry is skipped.
 //
-// Returns an error only if resolving the latest commit hash or the commit object fails; otherwise it returns nil.
-func Diff(verbose bool) error { //TODO - parameter to display error
+// Returns an error only if resolving the latest commit hash, or the commit object fails; otherwise it returns nil.
+func Diff(verbose bool) error {
 	//head -> contains latest commit hash
 	headHash, err := utils.GetLatestCommitHash()
 	if err != nil {
