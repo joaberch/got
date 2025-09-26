@@ -55,6 +55,8 @@ func main() {
 		err = cmd.Diff(parsed.Verbose)
 	case model.CmdSetRemote:
 		err = cmd.SetRemote(model.Local, args)
+	case model.CmdPush:
+		err = cmd.Push()
 	}
 
 	if err != nil {

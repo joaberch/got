@@ -9,4 +9,5 @@ var FilesList = map[string]string{
 	"objects/blobs":     "Folder", //Contain serialized blobs with hash as name
 	"head":              "File",   //Store the latest commit hash (HEAD)
 	"indexed_paths.csv": "File",   //Store all the file path used to check the diff
+	".gotconfig":        "File",   //Contains the remote config
 }

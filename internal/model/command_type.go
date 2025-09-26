@@ -14,4 +14,5 @@ const (
 	CmdLog
 	CmdDiff
 	CmdSetRemote
+	CmdPush
 )

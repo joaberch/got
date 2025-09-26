@@ -49,6 +49,8 @@ func ParseArgs(args []string) model.ParsedArgs {
 			parsed.Command = model.CmdDiff
 		case "set-remote", "setRemote":
 			parsed.Command = model.CmdSetRemote
+		case "push":
+			parsed.Command = model.CmdPush
 		case "-v":
 			parsed.Verbose = true
 		}
