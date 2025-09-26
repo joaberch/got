@@ -22,7 +22,7 @@ A minimalist version control system built in Go.
 
 This will :
 - Move the binary to a ``utils`` folder in the user directory.
-- Add the ``utils`` folder to the system ``PATH`` variable so ``gosearch`` can be run everywhere.
+- Add the ``utils`` folder to the system ``PATH`` variable so ``got`` can be run everywhere.
 
 > Manual setup :
 > - Move the binary to a specific folder
