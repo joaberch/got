@@ -39,7 +39,7 @@ func main() {
 		}
 	case model.CmdCommit:
 		if len(args) > 1 {
-			err = cmd.Commit(args[1])
+			err = cmd.Commit(args[1:])
 		} else {
 			log.Fatal("No commit message specified")
 		}

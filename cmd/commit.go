@@ -5,6 +5,7 @@ import (
 	"github.com/joaberch/got/internal/model"
 	"github.com/joaberch/got/utils"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -15,7 +16,7 @@ import (
 //
 // The message parameter is used as the commit message.
 // Returns an error if any step (reading staging, hashing/serializing, writing objects, updating commits/head, or clearing staging) fails.
-func Commit(message string) error {
+func Commit(message []string) error {
 	stagingPath := filepath.Join(".got", "staging.csv")
 	commitsPath := filepath.Join(".got", "commits.csv")
 
@@ -45,7 +46,7 @@ func Commit(message string) error {
 		TreeHash:   treeHash,
 		ParentHash: latestCommitHash,
 		Author:     "TODO - none for MVP",
-		Message:    message,
+		Message:    strings.Join(message, " "),
 		Timestamp:  time.Now().Unix(),
 	}
 
