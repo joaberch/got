@@ -16,7 +16,7 @@ import (
 // The function returns an error if the path contains ".got" (the tool ignores
 // its own metadata files), if the file contents cannot be read, or if writing
 // the entry to the staging area fails.
-func Add(path string) error { //TODO - auto-stage from file already added
+func Add(path string) error {
 	if strings.Contains(path, ".got") {
 		return errors.New("path contains '.got', got doesn't process itself")
 	}

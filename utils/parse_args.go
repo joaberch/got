@@ -11,15 +11,15 @@ import "github.com/joaberch/got/internal/model"
 // ParseArgs parses a slice of argument tokens and returns a model.ParsedArgs
 // whose Command field is set to the last recognized command token.
 //
-// It recognizes short and long forms for commands:
-// - "help" or "h" -> model.CmdHelp
-// - "version" or "v" -> model.CmdVersion
-// - "init" or "i" -> model.CmdInit
-// - "add" or "a" -> model.CmdAdd
-// - "commit" or "c" -> model.CmdCommit
-// - "restore" or "r" -> model.CmdRestore
-// - "log" or "l" -> model.CmdLog
-// - "diff" or "d" -> model.CmdDiff
+// It recognizes long forms for commands:
+// - "help" -> model.CmdHelp
+// - "version" -> model.CmdVersion
+// - "init" -> model.CmdInit
+// - "add" -> model.CmdAdd
+// - "commit" -> model.CmdCommit
+// - "restore" -> model.CmdRestore
+// - "log" -> model.CmdLog
+// - "diff" -> model.CmdDiff
 //
 // Unrecognized tokens are ignored; if no supported token is found the returned
 // ParsedArgs.Command remains model.CmdNone.

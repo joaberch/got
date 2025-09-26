@@ -5,8 +5,6 @@ import (
 	"github.com/joaberch/got/internal/model"
 )
 
-//TODO - mkdir the blobs dir?
-
 // CreateBlobs reads the file at entry.Name and writes its contents to the "blobs" object store using entry.Hash as the object name.
 // It returns a wrapped error if any file read or object write fails; on success it returns nil.
 func CreateBlobs(tree model.Tree) error {
