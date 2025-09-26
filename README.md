@@ -98,7 +98,6 @@ got diff                        # Display the differences in the file from the l
 - [ ] Use the branch system
 - [x] got diff
 - [ ] Push on remote server
-- [ ] Restore using a more user-friendly way
 
 ---
 
