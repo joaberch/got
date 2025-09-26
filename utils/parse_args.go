@@ -26,10 +26,10 @@ import "github.com/joaberch/got/internal/model"
 func ParseArgs(args []string) model.ParsedArgs {
 	parsed := model.ParsedArgs{
 		Command: model.CmdNone,
+		Verbose: false,
 	}
 
-	for i := 0; i < len(args); i++ {
-		arg := args[i]
+	for _, arg := range args {
 		switch arg {
 		case "help":
 			parsed.Command = model.CmdHelp
@@ -47,6 +47,8 @@ func ParseArgs(args []string) model.ParsedArgs {
 			parsed.Command = model.CmdLog
 		case "diff":
 			parsed.Command = model.CmdDiff
+		case "-v":
+			parsed.Verbose = true
 		}
 	}
 

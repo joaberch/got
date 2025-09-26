@@ -14,7 +14,7 @@ import (
 // content to the current file on disk. Per-entry read errors are printed and that entry is skipped.
 //
 // Returns an error only if resolving the latest commit hash or the commit object fails; otherwise it returns nil.
-func Diff() error { //TODO - parameter to display error
+func Diff(verbose bool) error { //TODO - parameter to display error
 	//head -> contains latest commit hash
 	headHash, err := utils.GetLatestCommitHash()
 	if err != nil {
@@ -58,13 +58,17 @@ func Diff() error { //TODO - parameter to display error
 			}
 			continue
 		} else if err != nil {
-			fmt.Printf("Failed to get committed blob: %v", err)
+			if verbose {
+				fmt.Printf("Failed to get committed blob: %v", err)
+			}
 			continue
 		}
 
 		committedBlob, err := utils.GetBlobFromHash(lastBlobHash)
 		if err != nil {
-			fmt.Printf("Failed to get committed blob: %v", err)
+			if verbose {
+				fmt.Printf("Failed to get committed blob: %v", err)
+			}
 			continue
 		}
 
@@ -80,7 +84,9 @@ func Diff() error { //TODO - parameter to display error
 			fmt.Printf("New file staged: %s\n", stagedPath)
 			currentData, err := utils.GetFileContent(stagedPath)
 			if err != nil {
-				fmt.Printf("failed to read file: %v", err)
+				if verbose {
+					fmt.Printf("failed to read file: %v", err)
+				}
 				continue
 			}
 			utils.ShowLineDiff("", string(currentData))

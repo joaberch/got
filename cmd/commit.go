@@ -45,7 +45,7 @@ func Commit(message []string) error {
 	commit := model.Commit{
 		TreeHash:   treeHash,
 		ParentHash: latestCommitHash,
-		Author:     "TODO - none for MVP",
+		Author:     "anonymous",
 		Message:    strings.Join(message, " "),
 		Timestamp:  time.Now().Unix(),
 	}

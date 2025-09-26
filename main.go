@@ -52,7 +52,7 @@ func main() {
 	case model.CmdLog:
 		err = cmd.Log()
 	case model.CmdDiff:
-		err = cmd.Diff()
+		err = cmd.Diff(parsed.Verbose)
 	}
 
 	if err != nil {
