@@ -24,34 +24,34 @@ func Restore(commitHash string) error {
 
 	data, err := utils.GetFileContent(objectPath)
 	if err != nil {
-		return fmt.Errorf("error reading file %s: %s", objectPath, err)
+		return fmt.Errorf("error reading file %s: %w", objectPath, err)
 	}
 	commit, err := utils.DeserializeCommit(data)
 	if err != nil {
-		return fmt.Errorf("error deserializing commit: %s", err)
+		return fmt.Errorf("error deserializing commit: %w", err)
 	}
 
 	treePath := filepath.Join(".got", "objects", "trees", commit.TreeHash)
 	treeData, err := utils.GetFileContent(treePath)
 	if err != nil {
-		return fmt.Errorf("error reading tree file %s: %s", treePath, err)
+		return fmt.Errorf("error reading tree file %s: %w", treePath, err)
 	}
 
 	tree, err := utils.DeserializeTree(treeData)
 	if err != nil {
-		return fmt.Errorf("error deserializing tree %s: %s", treePath, err)
+		return fmt.Errorf("error deserializing tree %s: %w", treePath, err)
 	}
 
 	for _, entry := range tree.Entries {
 		blobPath := filepath.Join(".got", "objects", "blobs", entry.Hash)
 		blobData, err := utils.GetFileContent(blobPath)
 		if err != nil {
-			return fmt.Errorf("error reading blob file %s: %s", blobPath, err)
+			return fmt.Errorf("error reading blob file %s: %w", blobPath, err)
 		}
 
 		err = os.WriteFile(entry.Name, blobData, 0644)
 		if err != nil {
-			return fmt.Errorf("error writing blob file %s: %s", blobPath, err)
+			return fmt.Errorf("error writing blob file %s: %w", blobPath, err)
 		}
 	}
 	fmt.Println("Files restored")

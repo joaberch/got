@@ -18,19 +18,19 @@ func Diff(verbose bool) error {
 	//head -> contains latest commit hash
 	headHash, err := utils.GetLatestCommitHash()
 	if err != nil {
-		return fmt.Errorf("failed to get latest commit hash: %v", err)
+		return fmt.Errorf("failed to get latest commit hash: %w", err)
 	}
 
 	//Commit -> contains tree hash
 	commit, err := utils.GetCommitFromHash(headHash)
 	if err != nil {
-		return fmt.Errorf("failed to get commit: %v", err)
+		return fmt.Errorf("failed to get commit: %w", err)
 	}
 
 	//Tree -> contains hash of blob(s)
 	tree, err := utils.GetTreeFromCommit(commit)
 	if err != nil {
-		return fmt.Errorf("failed to get tree: %v", err)
+		return fmt.Errorf("failed to get tree: %w", err)
 	}
 
 	stagedEntries, err := utils.GetStagedEntries()
@@ -40,7 +40,7 @@ func Diff(verbose bool) error {
 
 	indexedMap, err := utils.GetIndexedPathsWithHash()
 	if err != nil {
-		return fmt.Errorf("failed to get indexed paths: %v", err)
+		return fmt.Errorf("failed to get indexed paths: %w", err)
 	}
 
 	committedFiles := make(map[string]string)

@@ -18,7 +18,7 @@ func UpdateIndexedPaths(tree model.Tree) error {
 	if _, err := os.Stat(indexPath); err == nil {
 		file, err := os.Open(indexPath)
 		if err != nil {
-			return fmt.Errorf("error opening indexed path: %s", err)
+			return fmt.Errorf("error opening indexed path: %w", err)
 		}
 		defer func() {
 			closeErr := file.Close()
@@ -42,7 +42,7 @@ func UpdateIndexedPaths(tree model.Tree) error {
 
 	file, err := os.OpenFile(indexPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
-		return fmt.Errorf("error opening indexed path: %s", err)
+		return fmt.Errorf("error opening indexed path: %w", err)
 	}
 	defer func() {
 		closeErr := file.Close()
@@ -55,7 +55,7 @@ func UpdateIndexedPaths(tree model.Tree) error {
 	for name, hash := range existing {
 		_, err := writer.WriteString(fmt.Sprintf("%s,%s\n", name, hash))
 		if err != nil {
-			return fmt.Errorf("error writing to indexed path: %s", err)
+			return fmt.Errorf("error writing to indexed path: %w", err)
 		}
 	}
 	return writer.Flush()

@@ -18,13 +18,13 @@ func Log() error {
 	commitsPath := filepath.Join(".got", "commits.csv")
 	contents, err := utils.GetFileContent(commitsPath)
 	if err != nil {
-		return fmt.Errorf("error getting file contents: %s", err)
+		return fmt.Errorf("error getting file contents: %w", err)
 	}
 
 	csvReader := csv.NewReader(strings.NewReader(string(contents)))
 	records, err := csvReader.ReadAll()
 	if err != nil {
-		return fmt.Errorf("error reading file contents: %s", err)
+		return fmt.Errorf("error reading file contents: %w", err)
 	}
 
 	for _, record := range records {
@@ -34,7 +34,7 @@ func Log() error {
 
 		time, err := strconv.ParseInt(record[4], 10, 64)
 		if err != nil {
-			return fmt.Errorf("error converting time from file contents: %s", err)
+			return fmt.Errorf("error converting time from file contents: %w", err)
 		}
 		commitDisplay := model.CommitDisplay{
 			Hash:      record[0],
