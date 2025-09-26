@@ -10,13 +10,24 @@ import (
 // ConfigRemotePush
 func ConfigRemotePush(ip, user, path string) error {
 	configPath := filepath.Join(".got", ".gotconfig")
+	identity := filepath.Join(os.Getenv("USERPROFILE"), ".ssh", "id_rsa")
+	identityPub := identity + ".pub"
+
+	//Generate key if not exist
+	if err := GenerateSSHKey(identity); err != nil {
+		return fmt.Errorf("failed to generate SSH key: %w", err)
+	}
+
+	if err := CopySSHKeyToRemote(identityPub, user, ip); err != nil {
+		return fmt.Errorf("failed to copy SSH key: %w", err)
+	}
 
 	remote := map[string]map[string]string{
 		"remote": {
-			"ip":   ip,
-			"user": user,
-			"path": path,
-			//"identity": filepath.Join(os.Getenv("USERPROFILE"), ".ssh", "id_rsa"),
+			"ip":       ip,
+			"user":     user,
+			"path":     path,
+			"identity": identity,
 		},
 	}
 
