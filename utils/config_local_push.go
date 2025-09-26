@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 )
 
-// ConfigLocalRemote adds the path to the .gotconfig file in the local type
-func ConfigLocalRemote(path string) error {
+// ConfigLocalPush adds the path to the .gotconfig file in the local type
+func ConfigLocalPush(path string) error {
 	remotePath := filepath.Join(".got", ".gotconfig")
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		return fmt.Errorf("config Local Remote Path %s not found: %w", path, err)

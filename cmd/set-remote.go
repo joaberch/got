@@ -13,7 +13,7 @@ func SetRemote(remoteType model.RemoteType, args []string) error {
 	switch remoteType {
 	case model.Local:
 		if len(args) == 3 { //set-remote type path
-			err = utils.ConfigLocalRemote(args[2])
+			err = utils.ConfigLocalPush(args[2])
 		} else {
 			return fmt.Errorf("invalid number of arguments")
 		}

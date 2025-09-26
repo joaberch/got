@@ -54,7 +54,13 @@ func main() {
 	case model.CmdDiff:
 		err = cmd.Diff(parsed.Verbose)
 	case model.CmdSetRemote:
-		err = cmd.SetRemote(model.Local, args)
+		if len(args) >= 3 { //set-remote[0] local[1] path[2]
+			switch args[1] {
+			case "local":
+				err = cmd.SetRemote(model.Local, args)
+		} else {
+			log.Fatal("Not enough arguments")
+		}
 	case model.CmdPush:
 		err = cmd.Push()
 	}

@@ -15,8 +15,8 @@ func Push() error {
 		return fmt.Errorf("error reading .gotconfig: %w", err)
 	}
 
-	var config map[string]string
-	if err := json.Unmarshal(data, &config); err != nil {
+	var config map[string]any
+	if err = json.Unmarshal(data, &config); err != nil {
 		return fmt.Errorf("error unmarshaling .gotconfig: %w", err)
 	}
 
@@ -25,26 +25,9 @@ func Push() error {
 		return fmt.Errorf("no 'local' key in .gotconfig")
 	}
 
-	if _, err = os.Stat(remotePath); os.IsNotExist(err) {
-		return fmt.Errorf("remote path does not exist: %s", remotePath)
+	if localPath, ok := config["local"].(string); ok {
+		return utils.PushLocal(localPath)
 	}
 
-	err = utils.CopyDir(".got/objects", filepath.Join(remotePath, "objects"))
-	if err != nil {
-		return fmt.Errorf("error copying remote objects: %w", err)
-	}
-
-	files := []string{"commits.csv", "head"}
-	for _, file := range files {
-		src := filepath.Join(".got", file)
-		dst := filepath.Join(remotePath, file)
-
-		err = utils.CopyFile(src, dst)
-		if err != nil {
-			return fmt.Errorf("error copying remote objects: %w", err)
-		}
-	}
-
-	fmt.Println("Pushed remote objects to:", remotePath)
-	return nil
+	return fmt.Errorf("no remote or local config found")
 }
