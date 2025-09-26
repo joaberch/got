@@ -58,6 +58,13 @@ func main() {
 			switch args[1] {
 			case "local":
 				err = cmd.SetRemote(model.Local, args)
+			case "remote":
+				err = cmd.SetRemote(model.Remote, args) //TODO - documentation: SCP need to be enabled
+			case "git":
+				err = cmd.SetRemote(model.Git, args)
+			default:
+				log.Fatal("Invalid remote argument")
+			}
 		} else {
 			log.Fatal("Not enough arguments")
 		}

@@ -18,7 +18,12 @@ func SetRemote(remoteType model.RemoteType, args []string) error {
 			return fmt.Errorf("invalid number of arguments")
 		}
 	case model.Remote:
-		//TODO
+		if len(args) == 5 { //set-remote remote ip user path
+			ip := args[2]
+			user := args[3]
+			path := args[4]
+			err = utils.ConfigRemotePush(ip, user, path)
+		}
 	case model.Git:
 		//TODO
 	}

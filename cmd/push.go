@@ -20,9 +20,12 @@ func Push() error {
 		return fmt.Errorf("error unmarshaling .gotconfig: %w", err)
 	}
 
-	remotePath, ok := config["local"]
-	if !ok {
-		return fmt.Errorf("no 'local' key in .gotconfig")
+	if remote, ok := config["remote"].(map[string]any); ok {
+		ip := remote["ip"].(string)
+		user := remote["user"].(string)
+		path := remote["path"].(string)
+		identityPath := filepath.Join(os.Getenv("USERPROFILE"), ".ssh", "id_rsa")
+		return utils.PushRemote(ip, user, path, identityPath)
 	}
 
 	if localPath, ok := config["local"].(string); ok {
