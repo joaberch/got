@@ -29,30 +29,46 @@ func ParseArgs(args []string) model.ParsedArgs {
 		Verbose: false,
 	}
 
+	//flags
+	for _, arg := range args {
+		switch arg {
+		case "-v":
+			parsed.Verbose = true
+		}
+	}
+
 	for _, arg := range args {
 		switch arg {
 		case "help":
 			parsed.Command = model.CmdHelp
+			return parsed
 		case "version":
 			parsed.Command = model.CmdVersion
+			return parsed
 		case "init":
 			parsed.Command = model.CmdInit
+			return parsed
 		case "add":
 			parsed.Command = model.CmdAdd
+			return parsed
 		case "commit":
 			parsed.Command = model.CmdCommit
+			return parsed
 		case "restore":
 			parsed.Command = model.CmdRestore
+			return parsed
 		case "log":
 			parsed.Command = model.CmdLog
+			return parsed
 		case "diff":
 			parsed.Command = model.CmdDiff
+			return parsed
 		case "set-remote", "setRemote":
 			parsed.Command = model.CmdSetRemote
+			return parsed
 		case "push":
 			parsed.Command = model.CmdPush
-		case "-v":
-			parsed.Verbose = true
+			return parsed
 		}
 	}
 
