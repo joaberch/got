@@ -88,7 +88,8 @@ func TestCommit_Success(t *testing.T) {
 	}
 
 	//Act
-	err = cmd.Commit("My message")
+	message := []string{"my", "message"}
+	err = cmd.Commit(message)
 	if err != nil {
 		t.Fatalf("Failed to commit message: %v", err)
 	}
@@ -105,7 +106,7 @@ func TestCommit_Success(t *testing.T) {
 	//Check commits file has 1 entry
 	content, err = os.ReadFile(commitsPath)
 	lines := string(content)
-	if !strings.Contains(lines, "My message") {
+	if !strings.Contains(lines, "my message") {
 		t.Fatalf("Expected 'My message' but got '%v'", lines)
 	}
 	if err != nil {
@@ -172,7 +173,8 @@ func TestCommit_NoFolder(t *testing.T) {
 		}
 	}()
 
-	err = cmd.Commit("My message")
+	message := []string{"my", "message"}
+	err = cmd.Commit(message)
 	if err == nil {
 		t.Fatalf("Expected an error but got nil")
 	}
