@@ -8,12 +8,16 @@ import (
 	"os"
 )
 
-// missing commit message or missing restore hash terminate the program via log.Fatal.
+// main is the CLI entry point. It parses command-line arguments, dispatches the requested
+// subcommand (help, version, init, add, commit, restore, log, diff) to the cmd package,
+// and exits with a non-zero status if a command returns an error. Missing required
+// arguments for commit and restore cause an immediate fatal exit with an explanatory message.
 func main() {
 	var err error
 	args := os.Args[1:]
 	if len(args) < 1 {
 		cmd.ShowHelp()
+		return
 	}
 
 	parsed := utils.ParseArgs(args)
@@ -30,10 +34,12 @@ func main() {
 	case model.CmdAdd:
 		if len(args) > 1 {
 			err = cmd.Add(args[1])
+		} else {
+			log.Fatal("No path specified for add")
 		}
 	case model.CmdCommit:
 		if len(args) > 1 {
-			err = cmd.Commit(args[1])
+			err = cmd.Commit(args[1:])
 		} else {
 			log.Fatal("No commit message specified")
 		}
@@ -46,7 +52,24 @@ func main() {
 	case model.CmdLog:
 		err = cmd.Log()
 	case model.CmdDiff:
-		err = cmd.Diff()
+		err = cmd.Diff(parsed.Verbose)
+	case model.CmdSetRemote:
+		if len(args) >= 3 { //set-remote[0] local[1] path[2]
+			switch args[1] {
+			case "local":
+				err = cmd.SetRemote(model.Local, args)
+			case "remote":
+				err = cmd.SetRemote(model.Remote, args) //TODO - documentation: SCP need to be enabled
+			case "git":
+				err = cmd.SetRemote(model.Git, args)
+			default:
+				log.Fatal("Invalid remote argument")
+			}
+		} else {
+			log.Fatal("Not enough arguments")
+		}
+	case model.CmdPush:
+		err = cmd.Push()
 	}
 
 	if err != nil {

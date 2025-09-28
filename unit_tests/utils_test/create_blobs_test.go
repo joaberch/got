@@ -4,17 +4,17 @@ import (
 	"github.com/joaberch/got/internal/model"
 	"github.com/joaberch/got/utils"
 	"os"
-	"path"
 	"path/filepath"
 	"testing"
 )
 
 func TestCreateBlobs_ReadError(t *testing.T) {
+	base := t.TempDir()
 	tree := model.Tree{
 		Entries: []model.TreeEntry{
 			{
-				Name: "unexistent/file.txt",
-				Hash: "bolb123",
+				Name: filepath.Join(base, "nonexistent", "file.txt"),
+				Hash: "blob123",
 			},
 		},
 	}
@@ -28,7 +28,7 @@ func TestCreateBlobs_ReadError(t *testing.T) {
 func TestCreateBlobs_Success(t *testing.T) {
 	tmpDir := t.TempDir()
 
-	filePath := path.Join(tmpDir, "file.txt")
+	filePath := filepath.Join(tmpDir, "file.txt")
 	content := []byte("this is a test file")
 	err := os.WriteFile(filePath, content, 0666)
 	if err != nil {

@@ -56,19 +56,11 @@ func TestAddToCommits_Success(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	file, err := os.Open(tmpFile.Name())
+	//Check
+	_, err = tmpFile.Seek(0, 0)
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer func() {
-		err = file.Close()
-		if err != nil {
-			t.Fatal(err)
-		}
-	}()
-
-	//Check
-	tmpFile.Seek(0, 0)
 	reader := csv.NewReader(tmpFile)
 	records, err := reader.ReadAll()
 	if err != nil {

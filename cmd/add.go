@@ -5,38 +5,63 @@ import (
 	"fmt"
 	"github.com/joaberch/got/internal/model"
 	"github.com/joaberch/got/utils"
+	"os"
+	"path/filepath"
 	"strings"
 )
 
-// Add stages the file at the given path by creating a blob from its contents
-// and recording the blob's hash in the repository staging area.
+// Add stages the file at the given path by creating a blob from its contents,
+// computing its hash, and recording the path→hash pair in the staging area.
 //
-// The path is the filesystem path of the file to stage; the function reads the
-// file contents, constructs a model.Blob, generates its hash, and writes an
-// entry (path and hash) into the staging area. This function does not return
-// an error.
+// The function returns an error if the path contains ".got" (the tool ignores
+// its own metadata files), if the file contents cannot be read, or if writing
+// the entry to the staging area fails.
 func Add(path string) error {
 	if strings.Contains(path, ".got") {
 		return errors.New("path contains '.got', got doesn't process itself")
 	}
 
-	//Read the file
-	contents, err := utils.GetFileContent(path)
+	f, err := os.Stat(path)
 	if err != nil {
-		return fmt.Errorf("error getting file contents: %s", err)
+		return fmt.Errorf("os.Stat(%s): %w", path, err)
 	}
 
-	blob := model.Blob{
-		Content: contents,
-	}
+	if f.IsDir() { //If dir, recursive
+		entries, err := os.ReadDir(path)
+		if err != nil {
+			return fmt.Errorf("os.ReadDir(%s): %w", path, err)
+		}
 
-	//Get file hash
-	blob.GenerateHash()
+		for _, entry := range entries {
+			entryPath := filepath.Join(path, entry.Name())
+			if strings.Contains(entryPath, ".got") {
+				continue
+			}
 
-	//Add (the relative path, hash, (perm)) to staging.csv
-	err = utils.AddToStaging(path, blob.Hash)
-	if err != nil {
-		return fmt.Errorf("error adding to staging file: %s", err)
+			err = Add(entryPath)
+			if err != nil {
+				return err
+			}
+		}
+	} else {
+		//Read the file
+		contents, err := utils.GetFileContent(path)
+		if err != nil {
+			return fmt.Errorf("error getting file contents: %w", err)
+		}
+
+		blob := model.Blob{
+			Content: contents,
+		}
+
+		//Get file hash
+		blob.GenerateHash()
+
+		//Add (the relative path, hash, (perm)) to staging.csv
+		err = utils.AddToStaging(path, blob.Hash)
+		if err != nil {
+			return fmt.Errorf("error adding to staging file: %w", err)
+		}
 	}
 	return nil
 }

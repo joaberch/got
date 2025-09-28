@@ -37,6 +37,6 @@ func TestClearFile_Success(t *testing.T) {
 		t.Fatal(err)
 	}
 	if len(content) != 0 {
-		t.Fatalf("expected empty, got %s", content)
+		t.Fatalf("expected empty, got %q", content)
 	}
 }

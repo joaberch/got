@@ -1,18 +1,16 @@
 package utils
 
 import (
-	"os"
 	"path/filepath"
 	"strings"
 )
 
-// GetLatestCommitHash reads the file ".got/head" and returns its entire contents as a string.
-// Each line in the file is appended with a trailing newline in the returned value.
-// If the file cannot be opened or closed, the function logs the error and exits the process via log.Fatal.
-// If the file is empty, an empty string is returned.
+// GetLatestCommitHash reads the file ".got/head" and returns its contents as a trimmed string.
+// If the file cannot be read, an error is returned.
+// If the file is empty, an empty string is returned with no error.
 func GetLatestCommitHash() (string, error) {
 	headPath := filepath.Join(".got", "head")
-	data, err := os.ReadFile(headPath)
+	data, err := GetFileContent(headPath)
 	if err != nil {
 		return "", err
 	}

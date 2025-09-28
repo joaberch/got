@@ -23,12 +23,11 @@ func TestWriteObject_Success(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Error changing working directory: %v", err)
 	}
-	defer func() {
-		err = os.Chdir(oldWd)
-		if err != nil {
-			t.Fatalf("Error changing working directory: %v", err)
+	t.Cleanup(func() {
+		if err := os.Chdir(oldWd); err != nil {
+			t.Fatal(err)
 		}
-	}()
+	})
 
 	content := []byte("Hello World")
 	err = utils.WriteObject("blobs", "hash123", content)
@@ -63,12 +62,11 @@ func TestWriteObject_Duplicate(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Error changing working directory: %v", err)
 	}
-	defer func() {
-		err = os.Chdir(oldWd)
-		if err != nil {
-			t.Fatalf("Error changing working directory: %v", err)
+	t.Cleanup(func() {
+		if err := os.Chdir(oldWd); err != nil {
+			t.Fatal(err)
 		}
-	}()
+	})
 
 	initialContent := []byte("Hello World")
 	err = utils.WriteObject("blobs", "hash123", initialContent)
@@ -89,6 +87,6 @@ func TestWriteObject_Duplicate(t *testing.T) {
 	}
 
 	if string(data) != string(initialContent) {
-		t.Fatalf("Expected %s but found %s", string(initialContent), string(newContent))
+		t.Fatalf("Expected %s but found %s", string(initialContent), string(data))
 	}
 }

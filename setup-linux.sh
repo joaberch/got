@@ -4,7 +4,7 @@ USER_HOME="$HOME"
 UTILS_DIR="$USER_HOME/utils"
 mkdir -p "$UTILS_DIR"
 
-chmod +x ./gosearch
+chmod +x ./got
 
 mv ./got "$UTILS_DIR"
 
@@ -14,4 +14,5 @@ if [[ ":$PATH:" != *":$UTILS_DIR:"* ]]; then
 else
     echo "utils is already in the PATH."
 fi
-echo "Setup ended succesfully, type got help for help"
+source "$USER_HOME/.bashrc"
+echo "Setup ended successfully, type 'got help' for help"

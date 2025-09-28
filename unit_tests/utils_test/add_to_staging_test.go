@@ -17,7 +17,7 @@ func TestAddToStaging_FileOpenError(t *testing.T) {
 	}
 	err = os.Chdir(tmpDir)
 	if err != nil {
-		return
+		t.Fatal(err)
 	}
 	defer func() {
 		err = os.Chdir(oldWd)
@@ -46,7 +46,7 @@ func TestAddToStaging_Success(t *testing.T) {
 	}
 	err = os.Chdir(tmpDir)
 	if err != nil {
-		return
+		t.Fatal(err)
 	}
 	defer func() {
 		err = os.Chdir(oldWd)

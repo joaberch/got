@@ -3,13 +3,13 @@ package utils_test
 import (
 	"github.com/joaberch/got/utils"
 	"os"
-	"path"
+	"path/filepath"
 	"testing"
 )
 
 func TestCreateFilePath_File(t *testing.T) {
 	tmpDir := t.TempDir()
-	filePath := path.Join(tmpDir, "file")
+	filePath := filepath.Join(tmpDir, "file")
 
 	err := utils.CreateFilePath(filePath, "File")
 	if err != nil {
@@ -27,7 +27,7 @@ func TestCreateFilePath_File(t *testing.T) {
 
 func TestCreateFilePath_Folder(t *testing.T) {
 	tmpDir := t.TempDir()
-	folderPath := path.Join(tmpDir, "nested", "folder")
+	folderPath := filepath.Join(tmpDir, "nested", "folder")
 
 	err := utils.CreateFilePath(folderPath, "Folder")
 	if err != nil {
@@ -40,5 +40,20 @@ func TestCreateFilePath_Folder(t *testing.T) {
 	}
 	if !info.IsDir() {
 		t.Fatal("expected folder")
+	}
+}
+
+func TestCreateFilePath_UnknownType(t *testing.T) {
+	tmpDir := t.TempDir()
+	filePath := filepath.Join(tmpDir, "file")
+
+	err := utils.CreateFilePath(filePath, "Unknown")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = os.Stat(filePath)
+	if err == nil {
+		t.Fatal("expected no file created")
 	}
 }

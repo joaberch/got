@@ -13,7 +13,7 @@ import (
 func TestAdd_Success(t *testing.T) {
 	tmpDir := t.TempDir()
 
-	//Create file to add
+	//Create a file to add
 	filePath := filepath.Join(tmpDir, "file.txt")
 	content := []byte("Hello World")
 	err := os.WriteFile(filePath, content, 0666)
@@ -77,11 +77,11 @@ func TestAdd_Success(t *testing.T) {
 	hash.Write(content)
 	expectedHash := hex.EncodeToString(hash.Sum(nil))
 	if records[0][1] != expectedHash {
-		t.Fatalf("Expected 'Hello World', got '%s'", records[0][0])
+		t.Fatalf("Expected hash %q, got '%s'", expectedHash, records[0][1])
 	}
 
 	if records[0][0] != "file.txt" {
-		t.Fatalf("Expected 'file.txt', got '%s'", records[0][1])
+		t.Fatalf("Expected path %s, got '%s'", "file.txt", records[0][0])
 	}
 }
 

@@ -10,9 +10,9 @@ import (
 //
 // If fileType is "Folder", it creates the directory tree rooted at fullPath.
 // If fileType is "File", it ensures the parent directory exists and creates an empty file at fullPath.
-// For any other fileType value the function does nothing.
+// For any other fileType value, the function does nothing.
 //
-// Any filesystem error is fatal: the function calls log.Fatal on failure, terminating the program.
+// Returns an error if any filesystem operation fails.
 func CreateFilePath(fullPath string, fileType string) error {
 	const dirPerm = 0755
 

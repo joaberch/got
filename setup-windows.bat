@@ -3,7 +3,8 @@
 setlocal
 
 ::Step 1 - Compile
-go build
+echo compile
+go build -o got.exe
 
 ::Step 2 - Create utils folder in desktop if it doesn't exist
 set "UTILS_FOLDER=%USERPROFILE%\Desktop\utils"
@@ -22,14 +23,16 @@ echo Update system PATH var
 ::Define var NEW_PATH as a concatenate from old PATH with the new one
 set "NEW_PATH=%OLD_PATH%;%UTILS_FOLDER%"
 ::Add the concatenation to the registry (for PATH system var)
-::TODO check if already is
-reg add "%REG_PATH%" /v PATH /t REG_EXPAND_SZ /d "%NEW_PATH%" /f
+echo %OLD_PATH% | findstr /C:"%UTILS_FOLDER%" >nul
+if %errorlevel%==0 (
+    echo Path already contains utils folder
+) else (
+    reg add "%REG_PATH%" /v PATH /t REG_EXPAND_SZ /d "%NEW_PATH%" /f
+)
 
 ::Step 4 - Move compiled executable to utils folder
-::Move each executable to utils (should only be one)
-for %%F in (*.exe) do (
-    move "%%F" "%UTILS_FOLDER%"
-)
+move "got.exe" "%UTILS_FOLDER%"
+
 echo batch ended
-echo if 'access denied' error the exe is in Desktop/utils, either manually add it to the system PATH or restart the bat with admin right
+echo If 'access denied' error the exe is in Desktop/utils, either manually add it to the system PATH or restart the bat with admin right
 pause

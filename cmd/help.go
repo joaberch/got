@@ -3,7 +3,6 @@ package cmd
 import "fmt"
 
 // ShowHelp prints the command-line help and usage information for got to standard output.
-// The message includes available commands, short forms, usage examples, and the project source URL.
 func ShowHelp() {
 	fmt.Println("got - A simple version control system\n" +
 		"\n" +
@@ -11,15 +10,15 @@ func ShowHelp() {
 		"  got <command> [arguments]\n" +
 		"\n" +
 		"Available Commands:\n" +
-		"  help, h         Show this help message\n" +
-		"  version, v      Display the current version of got\n" +
-		"  init, i         Initialize a new got repository\n" +
-		"  add, a <file>   Add a file to the staging area\n" +
-		"  status, s       Show the status of the working directory\n" +
-		"  commit, c <msg> Commit staged changes with a message\n" +
-		"  restore, r <id> Restore a file from a previous commit by hash\n" +
-		"  log, l          Display the log from the commits file\n" +
-		"  diff, d         Display the differences in the file from the last commit" + //TODO - get (distinct) all files from all commits and use all of them for a better diff display
+		"  help					Show this help message\n" +
+		"  version				Display the current version of Got\n" +
+		"  init					Initialize a new Got repository\n" +
+		"  add <file>			Add a file to the staging area\n" +
+		"  status				Show the status of the working directory\n" +
+		"  commit <msg>			Commit staged changes with a message\n" +
+		"  restore <id>			Restore a file from a previous commit by hash\n" +
+		"  log					Display the log from the commits file\n" +
+		"  diff	[-v]			Display the differences in the file from the last commit who changed that file, verbose option\n" +
 		"\n" +
 		"Examples:\n" +
 		"  got init\n" +

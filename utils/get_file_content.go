@@ -6,8 +6,7 @@ import (
 )
 
 // GetFileContent reads and returns the contents of the file at the given path.
-// If the file cannot be read the function logs the error and calls log.Fatal,
-// causing the program to exit.
+// If the file cannot be read, the function returns an error with context.
 func GetFileContent(path string) ([]byte, error) {
 	contents, err := os.ReadFile(path)
 	if err != nil {
