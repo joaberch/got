@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-// ConfigRemotePush
+// ConfigRemotePush configurates the connection to the remote host and setup the ssh key par passwordless communication
 func ConfigRemotePush(ip, user, path string) error {
 	configPath := filepath.Join(".got", ".gotconfig")
 	identity := filepath.Join(os.Getenv("USERPROFILE"), ".ssh", "id_rsa")

@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 )
 
+// PushRemote push the commits data and the objects to the remote host
 func PushRemote(ip, user, path, identityPath string) error {
 	cmd := exec.Command("scp" /*"-i", identityPath,*/, "-r", ".got/objects", fmt.Sprintf("%s@%s:%s", user, ip, path))
 	cmd.Stdin = os.Stdin

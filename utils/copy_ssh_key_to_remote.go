@@ -7,6 +7,7 @@ import (
 	"os/exec"
 )
 
+// CopySSHKeyToRemote copy the ssh key to the remote host
 func CopySSHKeyToRemote(identityPubPath, user, ip string) error {
 	cmd := exec.Command("ssh", fmt.Sprintf("%s@%s", user, ip),
 		"mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys")

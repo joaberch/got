@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 )
 
+// PushLocal push the commits data and the objects to the local host
 func PushLocal(path string) error {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		return fmt.Errorf("remote path does not exist: %s", path)
