@@ -52,7 +52,7 @@ func main() {
 	case model.CmdLog:
 		err = cmd.Log()
 	case model.CmdDiff:
-		err = cmd.Diff(parsed.Verbose)
+		err = cmd.Diff(parsed.Verbose, args)
 	case model.CmdSetRemote:
 		if len(args) >= 3 { //set-remote[0] local[1] path[2]
 			switch args[1] {

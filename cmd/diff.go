@@ -14,8 +14,13 @@ import (
 // content to the current file on disk. Per-entry read errors are printed and that entry is skipped.
 //
 // Returns an error only if resolving the latest commit hash, or the commit object fails; otherwise it returns nil.
-func Diff(verbose bool) error {
-	//head -> contains latest commit hash
+func Diff(verbose bool, args []string) error {
+	var targetFile string
+	if len(args) > 1 {
+		targetFile = args[1]
+
+	}
+	//head -> contains the latest commit hash
 	headHash, err := utils.GetLatestCommitHash()
 	if err != nil {
 		return fmt.Errorf("could not get latest commit hash: %w", err)
@@ -28,6 +33,9 @@ func Diff(verbose bool) error {
 		}
 
 		for _, entry := range stagedEntries {
+			if targetFile != "" && entry != targetFile {
+				continue
+			}
 			fmt.Printf("New file staged: %s\n", entry)
 			currentData, err := utils.GetFileContent(entry)
 			if err != nil {
@@ -69,6 +77,9 @@ func Diff(verbose bool) error {
 	}
 
 	for path, lastBlobHash := range indexedMap {
+		if targetFile != "" && path != targetFile {
+			continue
+		}
 		currentData, err := utils.GetFileContent(path)
 		if os.IsNotExist(err) {
 			fmt.Printf("Deleted file: %s\n", path)
@@ -101,6 +112,9 @@ func Diff(verbose bool) error {
 	//Detect the added file
 	for _, stagedPath := range stagedEntries {
 		if _, exists := committedFiles[stagedPath]; !exists {
+			if targetFile != "" && stagedPath != targetFile {
+				continue
+			}
 			fmt.Printf("New file staged: %s\n", stagedPath)
 			currentData, err := utils.GetFileContent(stagedPath)
 			if err != nil {
