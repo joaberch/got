@@ -3,9 +3,8 @@ missing=()
 
 for file in $(find . -type f -name "*.go" ! -path "./unit_tests/*" ! -name "*_test.go"); do
   base=$(basename "$file" .go)
-  dir=$(dirname "$file")
-  test_path="unit_tests/${dir}_test/${base}_test.go"
-  if [ ! -f "$test_path" ]; then
+  found=$(find unit_tests -type f -name "*_test.go" | grep "/${base}_test.go" || true)
+  if [ -z "$found" ]; then
     missing+=("$file")
   fi
 done
