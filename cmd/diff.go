@@ -18,7 +18,27 @@ func Diff(verbose bool) error {
 	//head -> contains latest commit hash
 	headHash, err := utils.GetLatestCommitHash()
 	if err != nil {
-		return fmt.Errorf("failed to get latest commit hash: %w", err)
+		return fmt.Errorf("could not get latest commit hash: %w", err)
+	}
+	if headHash == "" {
+		//No commit done
+		stagedEntries, err := utils.GetStagedEntries()
+		if err != nil {
+			return fmt.Errorf("unable to get staged entries: %w", err)
+		}
+
+		for _, entry := range stagedEntries {
+			fmt.Printf("New file staged: %s\n", entry)
+			currentData, err := utils.GetFileContent(entry)
+			if err != nil {
+				if verbose {
+					fmt.Printf("unable to get file content: %v", err)
+				}
+				continue
+			}
+			utils.ShowLineDiff("", string(currentData))
+		}
+		return nil
 	}
 
 	//Commit -> contains tree hash
