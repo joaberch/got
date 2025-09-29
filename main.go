@@ -59,7 +59,7 @@ func main() {
 			case "local":
 				err = cmd.SetRemote(model.Local, args)
 			case "remote":
-				err = cmd.SetRemote(model.Remote, args) //TODO - documentation: SCP need to be enabled
+				err = cmd.SetRemote(model.Remote, args) //TODO - documentation: SCP&SSH need to be enabled
 			case "git":
 				err = cmd.SetRemote(model.Git, args)
 			default:
