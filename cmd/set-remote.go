@@ -12,7 +12,7 @@ func SetRemote(remoteType model.RemoteType, args []string) error {
 	var err error
 	switch remoteType {
 	case model.Local:
-		if len(args) == 3 { //set-remote type path
+		if len(args) == 3 { //set-remote local path
 			err = utils.ConfigLocalPush(args[2])
 		} else {
 			return fmt.Errorf("invalid number of arguments")
@@ -24,7 +24,7 @@ func SetRemote(remoteType model.RemoteType, args []string) error {
 			path := args[4]
 			err = utils.ConfigRemotePush(ip, user, path)
 		}
-	case model.Git:
+	case model.Git: //set-remote git https://github.com/user/repo.git
 		//TODO
 	}
 	return err
